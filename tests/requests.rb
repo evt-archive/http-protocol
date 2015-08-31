@@ -5,12 +5,10 @@ request = HTTPKit::Request.new
 
 assert :raises => ArgumentError do request.action = "get" end
 assert :raises => ArgumentError do request.action = "NOTACTION" end
-
 request.action = "GET"
-assert request.action, :equals => "GET"
 
+assert request.action, :equals => "GET"
 request.host = "example.com"
-assert request.host, :equals => "example.com"
 
 assert request.to_s, :equals => <<-HTTP
 GET / HTTP/1.1\r
@@ -33,16 +31,16 @@ request.accept_charset! "ascii"
 assert request.to_s, :matches => %r{Accept-Charset: utf-8; ascii\r$}
 
 assert :raises => ArgumentError do
-  request.content_length = -1
-end
-request.content_length = "55"
-assert request.to_s, :matches => %r{^Content-Length: 55\r$}
-
-assert :raises => ArgumentError do
   request.connection = "not-valid"
 end
 request.connection = "close"
 assert request.to_s, :matches => %r{^Connection: close\r$}
+
+assert :raises => ArgumentError do
+  request.content_length = -1
+end
+request.content_length = "55"
+assert request.to_s, :matches => %r{^Content-Length: 55\r$}
 
 request.path = "/some_resource.json"
 assert request.to_s, :matches => %r{^GET /some_resource\.json HTTP/1\.1\r$}
