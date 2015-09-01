@@ -1,14 +1,13 @@
-require_relative "response/headers"
-
 module HTTPKit
-  class Response
+  class Response < Message
+    require_relative "response/headers"
+
     def self.build
       headers = Headers.new
       new headers
     end
 
     STATUS_LINE_REGEX = %r{^HTTP\/1\.1 (?<status>\d+ [\w\s]+?)\s*\r$}
-    HEADER_REGEX = %r{^(?<header>[-\w]+): (?<value>.*?)\s*\r$}
 
     attr_reader :headers
     attr_reader :state
@@ -30,7 +29,9 @@ module HTTPKit
     def << data
       data.each_line do |line|
         case state
-        when :initial then self.status_line = line
+        when :initial then
+          self.status_line = line
+          @state = :headers
         when :headers then
           if line == HTTPKit.newline
             headers.freeze
@@ -64,7 +65,6 @@ module HTTPKit
       _, status = STATUS_LINE_REGEX.match(line).to_a
       raise ProtocolError.new "expected status line, not #{line.inspect}" unless status
       self.status = status
-      @state = :headers
     end
 
     def status_line
