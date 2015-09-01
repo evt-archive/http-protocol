@@ -15,6 +15,10 @@ module HTTPKit
         end
       end
 
+      def assign *;
+        fail "virtual: #{self.class}"
+      end
+
       def copy
         other_instance = dup
         instance_variables.each do |ivar|
@@ -30,7 +34,7 @@ module HTTPKit
       end
 
       def value
-        fail "virtual"
+        fail "virtual: #{self.class}"
       end
     end
   end
