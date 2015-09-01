@@ -11,6 +11,14 @@ module HTTPKit
       @custom_headers = {}
     end
 
+    def accept! content_type
+      handlers["Accept"].add_content_type content_type
+    end
+
+    def accept_charset! charset
+      handlers["Accept-Charset"].add_charset charset
+    end
+
     def [] name
       handlers[name]
     end

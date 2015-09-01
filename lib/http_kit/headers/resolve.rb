@@ -2,7 +2,7 @@ module HTTPKit
   class Headers
     module Resolve
       def resolve header_name
-        handler_cls_name = header_name.delete "-"
+        handler_cls_name = Util.to_camel_case header_name
 
         cls = self
         until cls == Headers

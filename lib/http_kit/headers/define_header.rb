@@ -2,17 +2,16 @@ module HTTPKit
   class Headers
     module DefineHeader
       def define_header header_name, &blk
-        handler_cls_name = header_name.delete "-"
+        handler_cls_name = Util.to_camel_case header_name
 
         handler_cls = Class.new Handler
-        handler_cls.class_exec &blk
+        handler_cls.class_exec &blk if block_given?
         const_set handler_cls_name, handler_cls
 
-        methods = handler_cls.public_instance_methods - Handler.instance_methods
-        methods.each do |method_name|
-          define_method method_name do |*args, &blk|
-            self[header_name].public_send method_name, *args, &blk
-          end
+        writer = Util.to_snake_case handler_cls_name
+        writer << "="
+        define_method writer do |value|
+          self[header_name].assign value
         end
       end
     end

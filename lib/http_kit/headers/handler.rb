@@ -15,8 +15,16 @@ module HTTPKit
         end
       end
 
-      def assign *;
-        fail "virtual: #{self.class}"
+      attr_reader :value
+
+      def assign value
+        value = coerce value if value.is_a? String
+        Array(value).each &method(:validate)
+        @value = value
+      end
+
+      def coerce str
+        str
       end
 
       def copy
@@ -29,12 +37,15 @@ module HTTPKit
         other_instance
       end
 
-      def to_s
-        "#{self.class.header_name}: #{value}\r\n"
+      def validate *;
       end
 
-      def value
-        fail "virtual: #{self.class}"
+      def serialized_value
+        value.to_s
+      end
+
+      def to_s
+        "#{self.class.header_name}: #{serialized_value}\r\n"
       end
     end
   end
