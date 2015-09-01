@@ -1,40 +1,49 @@
-require_relative "request/configuration"
+require_relative "request/headers"
 
 module HTTPKit
   class Request
-    include Configuration
+    ACTIONS = %w(OPTIONS GET HEAD POST PUT DELETE TRACE CONNECT PATCH)
 
-    expose Accept, methods: %i(accept! accepted_content_types)
-    expose AcceptCharset, methods: %i(accept_charset! accepted_charsets)
-    expose Connection, methods: %i(connection connection=)
-    expose ContentLength, methods: %i(content_length content_length=)
-    expose CustomHeaders, methods: %i(add_custom_header remove_custom_header custom_headers)
-    expose Date, methods: %i(date date=)
-    expose Action, methods: %i(action action=)
-    expose Host, methods: %i(host host=)
-    expose Path, methods: %i(path path=)
+    def self.build
+      headers = Headers.new
+      new headers
+    end
+
+    extend Forwardable
+    def_delegators :headers, :add_custom_header, :accept!, :accept_charset!,
+      :connection=, :content_length=, :date=, :host=, :remove_custom_header
+
+    attr_reader :action
+    attr_accessor :headers
+    attr_writer :path
+
+    def initialize headers
+      @headers = headers
+    end
+
+    def action= action
+      unless ACTIONS.include? action
+        raise ArgumentError, "Invalid action #{action.inspect}; valid actions are #{ACTIONS.map(&:inspect) * ", "}"
+      end
+      @action = action
+    end
+
+    def copy
+      instance = dup
+      instance.headers = headers.copy
+      instance
+    end
+
+    def path
+      @path or "/"
+    end
+
+    def request_line
+      %{#{action} #{path} HTTP/1.1\r\n}
+    end
 
     def to_s
-      lines = []
-      lines << %{#{action} #{path} HTTP/1.1}
-      lines << %{Host: #{host}}
-      if accepted_content_types.any?
-        lines << %{Accept: #{accepted_content_types * "; "}}
-      end
-      if accepted_charsets.any?
-        lines << %{Accept-Charset: #{accepted_charsets * "; "}}
-      end
-      lines << %{Connection: #{connection}} if connection
-      lines << %{Content-Length: #{content_length}} if content_length
-      lines << %{Date: #{date}} if date
-
-      custom_headers
-
-      lines.reduce "" do |str, line|
-        str << line
-        str << "\r\n"
-        str
-      end
+      [request_line, headers].join
     end
   end
 end
