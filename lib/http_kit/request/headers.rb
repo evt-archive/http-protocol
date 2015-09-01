@@ -17,7 +17,7 @@ module HTTPKit
 
         def validate content_type
           unless content_type.match %r{\A.+/.+\Z}
-            raise ArgumentError, "invalid content type #{content_type.inspect}"
+            raise ProtocolError.new "invalid content type #{content_type.inspect}"
           end
         end
 
@@ -41,9 +41,9 @@ module HTTPKit
         end
 
         def validate charset
-          unless Encoding.find charset
-            raise ArgumentError, "unknown charset #{charset.upcase.inspect}"
-          end
+          Encoding.find charset
+        rescue ArgumentError => error
+          raise ProtocolError.new error.message
         end
 
         def serialized_value

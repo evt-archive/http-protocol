@@ -6,8 +6,8 @@ def build_request action = "GET"
 end
 
 describe "setting the action" do
-  assert :raises => ArgumentError do HTTPKit::Request.build "get" end
-  assert :raises => ArgumentError do HTTPKit::Request.build "NOTACTION" end
+  assert :raises => HTTPKit::ProtocolError do HTTPKit::Request.build "get" end
+  assert :raises => HTTPKit::ProtocolError do HTTPKit::Request.build "NOTACTION" end
 end
 
 describe "setting the request line" do
@@ -30,7 +30,7 @@ end
 describe "accepting content types" do
   request = build_request
   request["Accept"] << "text/plain"
-  assert :raises => ArgumentError do
+  assert :raises => HTTPKit::ProtocolError do
     request["Accept"] << "not_a_mime_type"
   end
   request["Accept"] << "application/json"
@@ -43,7 +43,7 @@ end
 
 describe "accepting character sets" do
   request = build_request
-  assert :raises => ArgumentError do
+  assert :raises => HTTPKit::ProtocolError do
     request["Accept-Charset"] << "not-a-charset"
   end
   request["Accept-Charset"] << "utf-8"
@@ -57,7 +57,7 @@ end
 describe "setting the connection header" do
   request = build_request
 
-  assert :raises => ArgumentError do
+  assert :raises => HTTPKit::ProtocolError do
     request["Connection"] = "not-valid"
   end
   request["Connection"] = "close"
@@ -67,7 +67,7 @@ end
 describe "setting content length" do
   request = build_request
 
-  assert :raises => ArgumentError do
+  assert :raises => HTTPKit::ProtocolError do
     request["Content-Length"] = -1
   end
   request["Content-Length"] = "55"

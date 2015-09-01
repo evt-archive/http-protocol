@@ -11,7 +11,7 @@ module HTTPKit
 
         def validate value
           unless CONNECTIONS.include? value
-            raise ArgumentError, "bad Connection value #{value.inspect}; valid values are #{CONNECTIONS.map(&:inspect) * ", "}"
+            raise ProtocolError.new "bad Connection value #{value.inspect}; valid values are #{CONNECTIONS.map(&:inspect) * ", "}"
           end
         end
       end
@@ -19,7 +19,7 @@ module HTTPKit
       define_header "Content-Length" do
         def validate value
           if value < 0
-            raise ArgumentError, "content length must not be negative"
+            raise ProtocolError.new "content length must not be negative"
           end
         end
 
@@ -36,7 +36,9 @@ module HTTPKit
 
       define_header "Date" do
         def coerce str
-          Time.parse str
+          Time.httpdate str
+        rescue ArgumentError => error
+          raise ProtocolError.new error.message
         end
 
         def value

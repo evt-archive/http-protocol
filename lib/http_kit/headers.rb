@@ -24,7 +24,7 @@ module HTTPKit
     end
 
     def []= name, str
-      if str.empty?
+      if str.nil?
         handlers.delete name
       else
         handlers[name].assign str

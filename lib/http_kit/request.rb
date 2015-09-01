@@ -24,12 +24,12 @@ module HTTPKit
     end
 
     def []= name, value
-      headers[name] = value.to_s
+      headers[name] = value
     end
 
     def action= action
       unless ACTIONS.include? action
-        raise ArgumentError, "Invalid action #{action.inspect}; valid actions are #{ACTIONS.map(&:inspect) * ", "}"
+        raise ProtocolError.new "Invalid action #{action.inspect}; valid actions are #{ACTIONS.map(&:inspect) * ", "}"
       end
       @action = action
     end
