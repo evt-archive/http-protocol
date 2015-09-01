@@ -9,11 +9,9 @@ def establish_tcp_socket
 end
 
 def simple_resource_request
-  request = HTTPKit::Request.build
-  request.action = "GET"
-  request.path = "/simple_resource.json"
-  request.host = "localhost"
-  request.connection = "close"
+  request = HTTPKit::Request.build "GET", "/simple_resource.json"
+  request["Host"] = "localhost"
+  request["Connection"] = "close"
   request
 end
 

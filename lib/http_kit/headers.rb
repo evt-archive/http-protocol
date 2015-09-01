@@ -23,21 +23,18 @@ module HTTPKit
       handlers[name]
     end
 
-    def []= name, handler
-      handlers[name] = handler
-    end
-
-    def add_custom_header name, value
-      unless name.start_with? "X-"
-        raise ArgumentError, "Custom header #{name.inspect} invalid; must start with X-"
+    def []= name, str
+      if str.empty?
+        handlers.delete name
+      else
+        handlers[name].assign str
       end
-      custom_headers[name] = value
     end
 
     def copy
       instance = self.class.new
       handlers.each do |handler_cls_name, handler|
-        instance[handler_cls_name] = handler.copy
+        instance.handlers[handler_cls_name] = handler.copy
       end
       instance.custom_headers = custom_headers.dup
       instance
@@ -45,8 +42,9 @@ module HTTPKit
 
     def handlers
       @handlers ||= Hash.new do |hsh, header_name|
-        handler_cls = self.class.resolve header_name
-        hsh[header_name] = handler_cls.new
+        handler = self.class.resolve header_name
+        handler or raise ArgumentError, "Unknown header #{header_name.inspect}"
+        hsh[header_name] = handler
       end
     end
 

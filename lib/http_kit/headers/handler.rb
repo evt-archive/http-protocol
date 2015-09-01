@@ -37,6 +37,10 @@ module HTTPKit
         other_instance
       end
 
+      def header_name
+        self.class.header_name
+      end
+
       def validate *;
       end
 
@@ -45,7 +49,15 @@ module HTTPKit
       end
 
       def to_s
-        "#{self.class.header_name}: #{serialized_value}\r\n"
+        "#{header_name}: #{serialized_value}\r\n"
+      end
+
+      class CustomHeader < Handler
+        attr_reader :header_name
+
+        def initialize header_name
+          @header_name = header_name
+        end
       end
     end
   end

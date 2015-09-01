@@ -8,7 +8,7 @@ module HTTPKit
     end
 
     attr_reader :headers
-    attr_reader :status
+    attr_reader :status_message
 
     def initialize headers
       @headers = headers
@@ -32,9 +32,22 @@ module HTTPKit
       headers.frozen?
     end
 
+    def status= str
+      @status_code, @status_message = str.split " ", 2
+    end
+
+    def status
+      "#{status_code} #{status_message}"
+    end
+
+    def status_code
+      @status_code.to_i
+    end
+
     def status_line= line
       /^HTTP\/1\.1 (?<status>\d+ [\w\s]+?)\s*\r$/ =~ line
-      @status = status or raise ProtocolError.new "expected status line"
+      raise ProtocolError.new "expected status line" unless status
+      self.status = status
     end
 
     def handle_header line

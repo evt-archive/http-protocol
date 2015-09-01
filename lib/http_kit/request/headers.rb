@@ -10,7 +10,7 @@ module HTTPKit
           str.split %r{; ?}
         end
 
-        def add_content_type content_type
+        def << content_type
           validate content_type
           value << content_type
         end
@@ -35,7 +35,7 @@ module HTTPKit
           str.split %r{; ?}
         end
 
-        def add_charset charset
+        def << charset
           validate charset
           value << charset
         end

@@ -4,21 +4,27 @@ module HTTPKit
   class Request
     ACTIONS = %w(OPTIONS GET HEAD POST PUT DELETE TRACE CONNECT PATCH)
 
-    def self.build
-      headers = Headers.new
-      new headers
+    def self.build action, path = "/"
+      instance = new action, path
+      instance.headers = Headers.new
+      instance
     end
-
-    extend Forwardable
-    def_delegators :headers, :add_custom_header, :accept!, :accept_charset!,
-      :connection=, :content_length=, :date=, :host=, :remove_custom_header
 
     attr_reader :action
     attr_accessor :headers
-    attr_writer :path
+    attr_accessor :path
 
-    def initialize headers
-      @headers = headers
+    def initialize action = nil, path = nil
+      self.action = action if action
+      self.path = path if path
+    end
+
+    def [] name
+      headers[name]
+    end
+
+    def []= name, value
+      headers[name] = value.to_s
     end
 
     def action= action
@@ -32,10 +38,6 @@ module HTTPKit
       instance = dup
       instance.headers = headers.copy
       instance
-    end
-
-    def path
-      @path or "/"
     end
 
     def request_line
