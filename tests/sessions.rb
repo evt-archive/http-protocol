@@ -4,20 +4,22 @@ require "http_kit"
 require "json"
 require "socket"
 
-def tcp_socket
-  @tcp_socket ||= TCPSocket.new "127.0.0.1", 8888
+def establish_tcp_socket
+  TCPSocket.new "127.0.0.1", 8888
 end
 
-describe "a simple session" do
+def simple_resource_request
   request = HTTPKit::Request.build
   request.action = "GET"
   request.path = "/simple_resource.json"
   request.host = "localhost"
   request.connection = "close"
+  request
+end
 
-  logger.debug "Writing request:\n\n#{request}"
-
-  tcp_socket.write request.to_s
+describe "a simple client session" do
+  tcp_socket = establish_tcp_socket
+  tcp_socket.write simple_resource_request
   tcp_socket.write HTTPKit.newline
 
   response = HTTPKit::Response.build
