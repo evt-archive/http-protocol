@@ -38,13 +38,11 @@ describe "writing events" do
   event = JSON.pretty_generate data: "a_msg"
 
   request["ES-EventId"] = uuid
-  request["Content-Length"] = event.size + 2
+  request["Content-Length"] = event.size
 
   logger.debug do "Writing event:\n\n#{request}\r\n#{event}\r\n" end
   tcp_socket.write request
-  tcp_socket.write HTTPKit.newline
   tcp_socket.write event
-  tcp_socket.write HTTPKit.newline
 
   response = HTTPKit::Response.build
   response << tcp_socket.gets until response.in_body?

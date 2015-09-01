@@ -19,7 +19,7 @@ module HTTPKit
     end
 
     def to_s
-      [first_line, headers].join
+      [first_line, headers, HTTPKit.newline].join
     end
 
     def << data

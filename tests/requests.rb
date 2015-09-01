@@ -24,6 +24,7 @@ describe "setting the host" do
   assert request.to_s, :equals => <<-HTTP
 GET / HTTP/1.1\r
 Host: example.com\r
+\r
   HTTP
 end
 
