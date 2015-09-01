@@ -42,6 +42,13 @@ module HTTPKit
       %{#{action} #{path} HTTP/1.1\r\n}
     end
 
+    def request_line= str
+      %r{^(?<action>[A-Z]+) (?<path>.*) HTTP/1\.1\r$} =~ str
+      raise ProtocolError.new "expected request line" unless action
+      self.action = action
+      self.path = path
+    end
+
     def to_s
       [request_line, headers].join
     end
