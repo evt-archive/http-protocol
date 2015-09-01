@@ -43,8 +43,13 @@ module HTTPKit
     def handlers
       @handlers ||= Hash.new do |hsh, header_name|
         handler = self.class.resolve header_name
-        handler or raise ArgumentError, "Unknown header #{header_name.inspect}"
         hsh[header_name] = handler
+      end
+    end
+
+    def inspect
+      handlers.reduce String.new do |str, (_, handler)|
+        str << handler.to_s
       end
     end
 

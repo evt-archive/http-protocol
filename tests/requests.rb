@@ -86,14 +86,11 @@ end
 
 describe "custom headers" do
   request = build_request
-  request["X-SOME-HEADER"] = "foo"
-  assert :raises => ArgumentError do
-    request["DOES-NOT-START-WITH-X"] = "hi"
-  end
+  request["MY-CUSTOM-HEADER"] = "foo"
 
   copied_request = request.copy
-  copied_request["X-SOME-HEADER"] = nil
+  copied_request["MY-CUSTOM-HEADER"] = nil
 
-  assert request.to_s, :matches => %r{^X-SOME-HEADER: foo\r$}
-  refute copied_request.to_s, :matches => %r{X-SOME-HEADER}
+  assert request.to_s, :matches => %r{^MY-CUSTOM-HEADER: foo\r$}
+  refute copied_request.to_s, :matches => %r{MY-CUSTOM-HEADER}
 end

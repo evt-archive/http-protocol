@@ -25,6 +25,7 @@ describe "a simple client session" do
 
   data = tcp_socket.read
   data.chomp! HTTPKit.newline
+
   resource = JSON.parse data, :symbolize_names => true
   assert resource, :equals => { :id => 1234, :name => "A simple resource" }
 end

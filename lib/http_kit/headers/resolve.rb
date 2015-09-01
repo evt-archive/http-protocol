@@ -2,10 +2,6 @@ module HTTPKit
   class Headers
     module Resolve
       def resolve header_name
-        if header_name.start_with? "X-"
-          return Handler::CustomHeader.new header_name
-        end
-
         handler_cls_name = Util.to_camel_case header_name
 
         cls = self
@@ -16,6 +12,8 @@ module HTTPKit
           end
           cls = cls.superclass
         end
+
+        Handler::CustomHeader.new header_name
       end
     end
   end

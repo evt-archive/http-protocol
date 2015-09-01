@@ -26,6 +26,10 @@ module HTTPKit
         def coerce str
           str.to_i
         end
+
+        def to_i
+          value
+        end
       end
 
       define_header "Content-Type"
