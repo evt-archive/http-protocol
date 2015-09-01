@@ -19,7 +19,7 @@ def uuid
 end
 
 def write_event_request
-  request = HTTPKit::Request.new "POST", "/streams/testStream-#{uuid}"
+  request = HTTPKit::Request.build "POST", "/streams/testStream-#{uuid}"
   request.headers = common_headers.copy
   request["Content-Type"] = "application/json"
   request

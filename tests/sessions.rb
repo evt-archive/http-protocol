@@ -51,7 +51,7 @@ Content-Length: #{data.size + 2}\r
 end
 
 describe "a simple server session" do
-  data = p simple_resource_post_message
+  data = simple_resource_post_message
   io = StringIO.new data
 
   request = HTTPKit::Request.build

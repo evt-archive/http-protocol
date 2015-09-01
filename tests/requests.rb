@@ -11,7 +11,7 @@ describe "setting the action" do
 end
 
 describe "setting the request line" do
-  request = HTTPKit::Request.new
+  request = HTTPKit::Request.build
   request.request_line = "POST /foo.xml HTTP/1.1\r"
 
   assert request.path, :equals => "/foo.xml"

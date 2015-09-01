@@ -5,52 +5,21 @@ module HTTPKit
     ACTIONS = %w(OPTIONS GET HEAD POST PUT DELETE TRACE CONNECT PATCH)
     REQUEST_LINE_REGEX = %r{^(?<action>[A-Z]+) (?<path>.*) HTTP/1\.1\r}
 
-    def self.build action = nil, path = "/"
-      instance = new action, path
-      instance.headers = Headers.new
+    def self.build action = nil, path = nil
+      headers = Headers.new
+      instance = new headers
+      instance.action = action if action
+      instance.path = path if path
       instance
     end
 
     attr_reader :action
-    attr_accessor :headers
-    attr_accessor :path
+    attr_writer :path
     attr_reader :state
 
-    def initialize action = nil, path = nil
-      self.action = action if action
-      self.path = path if path
+    def initialize headers
+      @headers = headers
       @state = :initial
-    end
-
-    def [] name
-      headers[name]
-    end
-
-    def []= name, value
-      headers[name] = value
-    end
-
-    def << data
-      data.each_line do |line|
-        case state
-        when :initial then
-          self.request_line = line
-          @state = :headers
-        when :headers then
-          if line == HTTPKit.newline
-            headers.freeze
-            @state = :in_body
-          else
-            _, header, value = HEADER_REGEX.match(line).to_a
-            headers[header].assign value
-          end
-        when :in_body then fail "tried to read body"
-        end
-      end
-    end
-
-    def in_body?
-      state == :in_body
     end
 
     def action= action
@@ -58,12 +27,6 @@ module HTTPKit
         raise ProtocolError.new "Invalid action #{action.inspect}; valid actions are #{ACTIONS.map(&:inspect) * ", "}"
       end
       @action = action
-    end
-
-    def copy
-      instance = dup
-      instance.headers = headers.copy
-      instance
     end
 
     def request_line
@@ -77,8 +40,11 @@ module HTTPKit
       self.path = path
     end
 
-    def to_s
-      [request_line, headers].join
+    alias_method :first_line=, :request_line=
+    alias_method :first_line, :request_line
+
+    def path
+      @path or "/"
     end
   end
 end
