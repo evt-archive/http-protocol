@@ -14,6 +14,14 @@ module HTTPKit
       @headers = headers
     end
 
+    def [] name
+      headers[name]
+    end
+
+    def []= name, value
+      headers[name] = value
+    end
+
     def << data
       data.each_line &method(:handle_line)
     end

@@ -11,3 +11,20 @@ describe "status line" do
   assert response.status_code, :equals => 200
   assert response.status_message, :equals => "OK"
 end
+
+describe "Etag" do
+  response = build_response
+
+  assert :raises => ArgumentError do
+    response["Etag"] = "not_an_etag"
+  end
+  response["Etag"] = "deadbeef"
+end
+
+describe "Last-Modified" do
+  response = build_response
+
+  assert :raises => ArgumentError do
+    response["Last-Modified"] = "not_a_date"
+  end
+end
