@@ -1,12 +1,6 @@
 module HTTPKit
   class Response
     class Headers < Headers::Common
-      define_header "Access-Control-Allow-Methods"
-      define_header "Access-Control-Allow-Headers"
-      define_header "Access-Control-Allow-Origin"
-      define_header "Access-Control-Expose-Headers"
-      define_header "Location"
-
       define_header "Etag" do
         def validate etag
           unless etag.match %r{^(?:\W)?[-0-9a-f]{4,}$}
@@ -50,8 +44,6 @@ module HTTPKit
           raise ProtocolError.new error.message
         end
       end
-
-      define_header "Server"
     end
   end
 end

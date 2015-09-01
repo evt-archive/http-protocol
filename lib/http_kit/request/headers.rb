@@ -50,8 +50,6 @@ module HTTPKit
           value * "; "
         end
       end
-
-      define_header "Host"
     end
   end
 end
