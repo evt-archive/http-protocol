@@ -28,7 +28,20 @@ module HTTPKit
     end
 
     def << data
-      data.each_line &method(:handle_line)
+      data.each_line do |line|
+        case state
+        when :initial then self.status_line = line
+        when :headers then
+          if line == HTTPKit.newline
+            headers.freeze
+            @state = :in_body
+          else
+            _, header, value = HEADER_REGEX.match(line).to_a
+            headers[header].assign value
+          end
+        when :in_body then fail "tried to read body"
+        end
+      end
     end
 
     def in_body?
@@ -56,24 +69,6 @@ module HTTPKit
 
     def status_line
       "HTTP/1.1 #{status}"
-    end
-
-    def handle_header line
-      if line == HTTPKit.newline
-        headers.freeze
-        @state = :in_body
-      else
-        _, header, value = HEADER_REGEX.match(line).to_a
-        headers[header].assign value
-      end
-    end
-
-    def handle_line line
-      case state
-      when :initial then self.status_line = line
-      when :headers then handle_header line
-      when :in_body then fail "tried to read body"
-      end
     end
 
     def to_s
