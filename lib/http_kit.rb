@@ -8,9 +8,5 @@ module HTTPKit
   autoload :Response, "http_kit/response"
   autoload :Util, "http_kit/util"
 
-  def self.newline
-    "\r\n".freeze
-  end
-
   ProtocolError = Class.new StandardError
 end

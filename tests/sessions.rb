@@ -10,7 +10,7 @@ def establish_tcp_socket
 end
 
 def simple_resource_request
-  request = HTTPKit::Request.build "GET", "/simple_resource.json"
+  request = HTTPKit::Request.new "GET", "/simple_resource.json"
   request["Host"] = "localhost"
   request["Connection"] = "close"
   request
@@ -20,8 +20,8 @@ describe "a simple client session" do
   tcp_socket = establish_tcp_socket
   tcp_socket.write simple_resource_request
 
-  response = HTTPKit::Response.build
-  response << tcp_socket.gets until response.in_body?
+  builder = HTTPKit::Response.builder
+  builder << tcp_socket.gets until builder.finished_headers?
 
   data = tcp_socket.read
 
@@ -52,8 +52,8 @@ describe "a simple server session" do
   data = simple_resource_post_message
   io = StringIO.new data
 
-  request = HTTPKit::Request.build
-  request << io.gets until request.in_body?
+  builder = HTTPKit::Request.builder
+  builder << io.gets until builder.finished_headers?
 
   body = io.read
 

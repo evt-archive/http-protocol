@@ -1,21 +1,21 @@
 require "ftest/script"
 require "http_kit"
 
-def build_request action = "GET"
-  HTTPKit::Request.build action
+def build_request action = "GET", path = "/"
+  HTTPKit::Request.new action, path
 end
 
-describe "setting the action" do
-  assert :raises => HTTPKit::ProtocolError do HTTPKit::Request.build "get" end
-  assert :raises => HTTPKit::ProtocolError do HTTPKit::Request.build "NOTACTION" end
-end
+describe "Parsing the request line" do
+  request = HTTPKit::Request.make "GET /foo HTTP/1.1\r"
+  assert request.action, :equals => "GET"
+  assert request.path, :equals => "/foo"
 
-describe "setting the request line" do
-  request = HTTPKit::Request.build
-  request.request_line = "POST /foo.xml HTTP/1.1\r"
-
-  assert request.path, :equals => "/foo.xml"
-  assert request.action, :equals => "POST"
+  assert :raises => HTTPKit::ProtocolError do
+    HTTPKit::Request.make "get /foo HTTP/1.1\r"
+  end
+  assert :raises => HTTPKit::ProtocolError do
+    HTTPKit::Request.make "NOTACTION /foo HTTP/1.1\r"
+  end
 end
 
 describe "setting the host" do
@@ -37,7 +37,7 @@ describe "accepting content types" do
   request["Accept"] << "application/json"
   request["Accept"] << "application/vnd+acme.v1+json"
 
-  request.copy["Accept"] << "application/xml"
+  request.headers.copy["Accept"] << "application/xml"
 
   assert request.to_s, :matches => %r{^Accept: text/plain; application/json; application/vnd\+acme\.v1\+json\r$}
 end
@@ -50,7 +50,7 @@ describe "accepting character sets" do
   request["Accept-Charset"] << "utf-8"
   request["Accept-Charset"] << "ascii"
 
-  request.copy["Accept-Charset"] << "cp1252"
+  request.headers.copy["Accept-Charset"] << "cp1252"
 
   assert request.to_s, :matches => %r{^Accept-Charset: utf-8; ascii}
 end
@@ -89,9 +89,9 @@ describe "custom headers" do
   request = build_request
   request["MY-CUSTOM-HEADER"] = "foo"
 
-  copied_request = request.copy
-  copied_request["MY-CUSTOM-HEADER"] = nil
+  copied_request_headers = request.headers.copy
+  copied_request_headers["MY-CUSTOM-HEADER"] = nil
 
   assert request.to_s, :matches => %r{^MY-CUSTOM-HEADER: foo\r$}
-  refute copied_request.to_s, :matches => %r{MY-CUSTOM-HEADER}
+  refute copied_request_headers.to_s, :matches => %r{MY-CUSTOM-HEADER}
 end

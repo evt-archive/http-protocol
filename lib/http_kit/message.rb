@@ -1,48 +1,54 @@
 module HTTPKit
-  class Message
-    HEADER_REGEX = %r{^(?<header>[-\w]+): (?<value>.*?)\s*\r$}
+  class Message < Module
+    require_relative "message/builder"
 
-    attr_accessor :headers
+    attr_reader :factory
 
-    def [] name
-      headers[name]
+    def initialize factory
+      @factory = factory
     end
 
-    def []= name, value
-      headers[name] = value
-    end
+    def included cls
+      cls.class_exec factory do |factory|
+        include InstanceMethods
 
-    def copy
-      instance = dup
-      instance.headers = headers.copy
-      instance
-    end
+        define_singleton_method :make do |first_line|
+          factory.(first_line)
+        end
 
-    def to_s
-      [first_line, headers, HTTPKit.newline].join
-    end
-
-    def << data
-      data.each_line do |line|
-        case state
-        when :initial then
-          self.first_line = line
-          @state = :headers
-        when :headers then
-          if line == HTTPKit.newline
-            headers.freeze
-            @state = :in_body
-          else
-            _, header, value = HEADER_REGEX.match(line).to_a
-            headers[header].assign value
-          end
-        when :in_body then fail "tried to read body"
+        define_singleton_method :builder do
+          factory_method = method :make
+          Builder.new factory_method
         end
       end
     end
 
-    def in_body?
-      state == :in_body
+    module InstanceMethods
+      attr_writer :headers
+
+      def [] name
+        headers[name]
+      end
+
+      def []= name, value
+        headers[name] = value
+      end
+
+      def first_line
+        fail "must be implemented"
+      end
+
+      def headers
+        fail "must be implemented"
+      end
+
+      def newline
+        "\r\n"
+      end
+
+      def to_s
+        [first_line, newline, headers, newline].join
+      end
     end
   end
 end

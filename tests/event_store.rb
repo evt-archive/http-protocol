@@ -19,7 +19,7 @@ def uuid
 end
 
 def write_event_request
-  request = HTTPKit::Request.build "POST", "/streams/testStream-#{uuid}"
+  request = HTTPKit::Request.new "POST", "/streams/testStream-#{uuid}"
   request.headers = common_headers.copy
   request["Content-Type"] = "application/json"
   request
@@ -44,8 +44,9 @@ describe "writing events" do
   tcp_socket.write request
   tcp_socket.write event
 
-  response = HTTPKit::Response.build
-  response << tcp_socket.gets until response.in_body?
+  builder = HTTPKit::Response.builder
+  builder << tcp_socket.gets until builder.finished_headers?
+  response = builder.message
   logger.debug do "Received response:\n\n#{response}" end
 
   if response["Connection"].value == "close"
