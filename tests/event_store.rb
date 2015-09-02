@@ -32,7 +32,7 @@ def write_some_event tcp_socket, stream_id, event
 
   request["Content-Length"] = event.size
 
-  logger.debug do "Writing event:\n\n#{request}\r\n#{event}\r\n" end
+  logger.debug do "Writing event:\n\n#{request}#{event}\r\n" end
 
   tcp_socket.write request
   tcp_socket.write event
@@ -44,7 +44,7 @@ def write_some_event tcp_socket, stream_id, event
 
   logger.debug "Finished writing event:\n\n#{response}"
 
-  if response["Connection"].value == "close"
+  if response["Connection"] == "close"
     logger.debug do "Re-establishing connection" end
     tcp_socket.close
     tcp_socket = establish_connection
@@ -56,7 +56,7 @@ end
 def read_events_request stream_id = uuid, start = 0
   request = HTTP::Protocol::Request.new "GET", "/streams/testStream-#{stream_id}/#{start}/forward/1?embed=body"
   request.merge_headers common_headers
-  request["Accept"] << "application/json"
+  request.accept "application/json"
   request
 end
 

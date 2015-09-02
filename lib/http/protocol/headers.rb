@@ -24,7 +24,7 @@ module HTTP::Protocol
     end
 
     def [] name
-      handlers[name]
+      handlers[name].serialized_value
     end
 
     def []= name, str

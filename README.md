@@ -56,12 +56,15 @@ data = tcp_socket.read length
 
 ##### Setting headers
 
-`HTTP::Protocol` exposes a semantic API for setting headers. For instance, instead of setting `Accept` to `application/json; text/plain`, you can set them one at a time:
+`HTTP::Protocol` exposes a semantic interface for setting headers. For instance, instead of setting `Accept` to `application/json; text/plain`, you can set them one at a time:
 
 ```ruby
-# The handler for Accept manages a list of content types internally; you can
-# shovel them in one by one.
-request["Accept"] << "application/json"
+headers = HTTP::Protocol::Request::Headers.new
+headers.accept "application/json"
+
+# Request will delegate
+request = HTTP::Protocol::Request.new "GET", "/"
+request.accept "application/json"
 ```
 
 See `tests/headers.rb` for usage examples of all of the headers that `HTTP::Protocol` knows about. The list is expected to grow over time. Any header that is not explicitly handled by `HTTP::Protocol` is treated as a custom header, which you can simply treat as a string:

@@ -26,6 +26,10 @@ module HTTP::Protocol
         end
       end
 
+      def accept content_type
+        handlers["Accept"] << content_type
+      end
+
       define_header "Accept-Charset" do
         def initialize
           @value = []
@@ -49,6 +53,10 @@ module HTTP::Protocol
         def serialized_value
           value * "; "
         end
+      end
+
+      def accept_charset charset
+        handlers["Accept-Charset"] << charset
       end
     end
   end

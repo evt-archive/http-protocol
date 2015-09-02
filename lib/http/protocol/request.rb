@@ -4,10 +4,13 @@ require_relative "request/headers"
 module HTTP::Protocol
   class Request
     include Message.new Factory
+    extend Forwardable
 
     def self.build request_line
       Builder.(request_line)
     end
+
+    def_delegators :headers, :accept, :accept_charset
 
     attr_reader :action
     attr_reader :path

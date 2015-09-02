@@ -101,12 +101,12 @@ describe "Request headers" do
   describe "Accept" do
     headers = build_request_headers
 
-    headers["Accept"] << "text/plain"
+    headers.accept "text/plain"
     assert :raises => HTTP::Protocol::Error do
-      headers["Accept"] << "not_a_mime_type"
+      headers.accept "not_a_mime_type"
     end
-    headers["Accept"] << "application/json"
-    headers["Accept"] << "application/vnd+acme.v1+json"
+    headers.accept "application/json"
+    headers.accept "application/vnd+acme.v1+json"
 
     assert headers.to_s, :matches => %r{^Accept: text/plain; application/json; application/vnd\+acme\.v1\+json\r$}
   end
@@ -115,10 +115,10 @@ describe "Request headers" do
     headers = build_request_headers
 
     assert :raises => HTTP::Protocol::Error do
-      headers["Accept-Charset"] << "not-a-charset"
+      headers.accept_charset "not-a-charset"
     end
-    headers["Accept-Charset"] << "utf-8"
-    headers["Accept-Charset"] << "ascii"
+    headers.accept_charset "utf-8"
+    headers.accept_charset "ascii"
 
     assert headers.to_s, :matches => /^Accept-Charset: utf-8; ascii\r$/
   end

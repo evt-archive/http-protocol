@@ -27,7 +27,7 @@ module HTTP::Protocol
           raise Error.new "not a header #{line.inspect}"
         end
         header, value = match.to_a.tap &:shift
-        message[header].assign value
+        message[header] = value
       end
 
       def handle_line_in_body line
