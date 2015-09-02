@@ -1,3 +1,5 @@
+require "bundler/gem_tasks"
+
 lib_root = File.expand_path "../lib", __FILE__
 $LOAD_PATH << lib_root unless $LOAD_PATH.include? lib_root
 
