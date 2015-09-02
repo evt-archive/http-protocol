@@ -6,7 +6,7 @@ module HTTP::Protocol
         instance.call
       end
 
-      STATUS_LINE_REGEX = %r{^HTTP\/1\.1 (?<status_code>\d+) (?<status_message>[\w\s]+?)\s*\r$}
+      STATUS_LINE_REGEX = %r{^HTTP\/1\.1 (?<status_code>\d+) (?<status_message>.+?)\s*\r$}
 
       attr_reader :status_line
 
