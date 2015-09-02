@@ -35,15 +35,6 @@ module HTTPProtocol
       end
     end
 
-    def copy
-      instance = self.class.new
-      handlers.each do |handler_cls_name, handler|
-        instance.handlers[handler_cls_name] = handler.copy
-      end
-      instance.custom_headers = custom_headers.dup
-      instance
-    end
-
     def handlers
       @handlers ||= Hash.new do |hsh, header_name|
         handler = self.class.resolve header_name
@@ -54,6 +45,19 @@ module HTTPProtocol
     def inspect
       handlers.reduce String.new do |str, (_, handler)|
         str << handler.to_s
+      end
+    end
+
+    def merge other_headers
+      instance = self.class.new
+      instance.merge! self
+      instance.merge! other_headers
+      instance
+    end
+
+    def merge! other_headers
+      other_headers.handlers.each do |header_name, handler|
+        handlers[header_name] = handler.copy
       end
     end
 

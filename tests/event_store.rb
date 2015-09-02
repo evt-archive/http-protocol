@@ -20,7 +20,7 @@ end
 
 def write_event_request
   request = HTTPProtocol::Request.new "POST", "/streams/testStream-#{uuid}"
-  request.headers = common_headers.copy
+  request.merge_headers common_headers
   request["Content-Type"] = "application/json"
   request
 end

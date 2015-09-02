@@ -4,7 +4,7 @@ module HTTPProtocol
 
     def to_camel_case str
       str = "_#{str}"
-      str.gsub! %r{[-_][a-zA-Z]} do |snake|
+      str.gsub! %r{[-_][a-zA-Z\d]} do |snake|
         snake.slice(1).upcase
       end
       str.gsub! '/', '::'

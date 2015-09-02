@@ -42,6 +42,10 @@ module HTTPProtocol
         fail "must be implemented"
       end
 
+      def merge_headers new_headers
+        headers.merge! new_headers
+      end
+
       def newline
         "\r\n"
       end
