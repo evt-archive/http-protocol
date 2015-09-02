@@ -1,4 +1,4 @@
-module HTTPProtocol
+module HTTP::Protocol
   class Headers
     module Common
       def self.included cls

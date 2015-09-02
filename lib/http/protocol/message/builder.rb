@@ -1,4 +1,4 @@
-module HTTPProtocol
+module HTTP::Protocol
   Message.class_eval do
     class Builder
       HEADER_REGEX = %r{^(?<header>[-\w]+): (?<value>.*?)\s*\r$}

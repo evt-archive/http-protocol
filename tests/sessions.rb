@@ -1,5 +1,5 @@
 require "ftest/script"
-require "http_protocol"
+require "http/protocol"
 
 require "json"
 require "socket"
@@ -10,7 +10,7 @@ def establish_tcp_socket
 end
 
 def simple_resource_request
-  request = HTTPProtocol::Request.new "GET", "/simple_resource.json"
+  request = HTTP::Protocol::Request.new "GET", "/simple_resource.json"
   request["Host"] = "localhost"
   request["Connection"] = "close"
   request
@@ -20,7 +20,7 @@ describe "a simple client session" do
   tcp_socket = establish_tcp_socket
   tcp_socket.write simple_resource_request
 
-  builder = HTTPProtocol::Response.builder
+  builder = HTTP::Protocol::Response.builder
   builder << tcp_socket.gets until builder.finished_headers?
 
   data = tcp_socket.read
@@ -52,7 +52,7 @@ describe "a simple server session" do
   data = simple_resource_post_message
   io = StringIO.new data
 
-  builder = HTTPProtocol::Request.builder
+  builder = HTTP::Protocol::Request.builder
   builder << io.gets until builder.finished_headers?
 
   body = io.read

@@ -1,4 +1,4 @@
-module HTTPProtocol
+module HTTP::Protocol
   class Request
     class Factory
       def self.call *args

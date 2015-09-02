@@ -1,4 +1,4 @@
-module HTTPProtocol
+module HTTP::Protocol
   class Request
     class Headers < Headers
       define_header "Accept" do

@@ -1,4 +1,4 @@
-module HTTPProtocol
+module HTTP::Protocol
   class Response
     class Headers < Headers
       define_header "Etag" do

@@ -1,10 +1,10 @@
 require "ftest/script"
-require "http_protocol"
+require "http/protocol"
 
 require "time"
 
 def build_headers
-  HTTPProtocol::Headers.new
+  HTTP::Protocol::Headers.new
 end
 
 def fixed_time
@@ -15,7 +15,7 @@ describe "Common headers" do
   describe "Connection" do
     headers = build_headers
 
-    assert :raises => HTTPProtocol::Error do
+    assert :raises => HTTP::Protocol::Error do
       headers["Connection"] = "not-valid"
     end
     headers["Connection"] = "close"
@@ -95,14 +95,14 @@ end
 
 describe "Request headers" do
   def build_request_headers
-    HTTPProtocol::Request::Headers.new
+    HTTP::Protocol::Request::Headers.new
   end
 
   describe "Accept" do
     headers = build_request_headers
 
     headers["Accept"] << "text/plain"
-    assert :raises => HTTPProtocol::Error do
+    assert :raises => HTTP::Protocol::Error do
       headers["Accept"] << "not_a_mime_type"
     end
     headers["Accept"] << "application/json"
@@ -114,7 +114,7 @@ describe "Request headers" do
   describe "Accept-Charset" do
     headers = build_request_headers
 
-    assert :raises => HTTPProtocol::Error do
+    assert :raises => HTTP::Protocol::Error do
       headers["Accept-Charset"] << "not-a-charset"
     end
     headers["Accept-Charset"] << "utf-8"
@@ -126,13 +126,13 @@ end
 
 describe "Response headers" do
   def build_response_headers
-    HTTPProtocol::Response::Headers.new
+    HTTP::Protocol::Response::Headers.new
   end
 
   describe "Etag" do
     headers = build_response_headers
 
-    assert :raises => HTTPProtocol::Error do
+    assert :raises => HTTP::Protocol::Error do
       headers["Etag"] = "not_an_etag"
     end
     headers["Etag"] = "deadbeef"
@@ -143,7 +143,7 @@ describe "Response headers" do
   describe "Last-Modified" do
     headers = build_response_headers
 
-    assert :raises => HTTPProtocol::Error do
+    assert :raises => HTTP::Protocol::Error do
       headers["Last-Modified"] = "not_a_date"
     end
     headers["Last-Modified"] = fixed_time

@@ -1,4 +1,4 @@
-module HTTPProtocol
+module HTTP::Protocol
   class Headers
     class Handler
       def self.header_name

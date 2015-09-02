@@ -1,4 +1,4 @@
-module HTTPProtocol
+module HTTP::Protocol
   class Headers
     module DefineHeader
       def define_header header_name, &blk

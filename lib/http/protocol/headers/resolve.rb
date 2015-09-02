@@ -1,4 +1,4 @@
-module HTTPProtocol
+module HTTP::Protocol
   class Headers
     module Resolve
       def resolve header_name

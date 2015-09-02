@@ -1,5 +1,5 @@
 require "ftest/script"
-require "http_protocol"
+require "http/protocol"
 
 require "json"
 require "socket"
@@ -8,7 +8,7 @@ require "securerandom"
 def common_headers
   @common_headers ||=
     begin
-      headers = HTTPProtocol::Request::Headers.new
+      headers = HTTP::Protocol::Request::Headers.new
       headers["Host"] = "localhost"
       headers
     end
@@ -19,7 +19,7 @@ def uuid
 end
 
 def write_event_request
-  request = HTTPProtocol::Request.new "POST", "/streams/testStream-#{uuid}"
+  request = HTTP::Protocol::Request.new "POST", "/streams/testStream-#{uuid}"
   request.merge_headers common_headers
   request["Content-Type"] = "application/json"
   request["ES-EventType"] = "TestEvent"
@@ -28,7 +28,7 @@ def write_event_request
 end
 
 def read_events_request
-  request = HTTPProtocol::Request.new "GET", "/streams/$ce-testStream/0/forward/50"
+  request = HTTP::Protocol::Request.new "GET", "/streams/$ce-testStream/0/forward/50"
   request.merge_headers common_headers
   request["Accept"] << "application/json"
   request
@@ -50,7 +50,7 @@ describe "Writing events" do
   tcp_socket.write request
   tcp_socket.write event
 
-  builder = HTTPProtocol::Response.builder
+  builder = HTTP::Protocol::Response.builder
   builder << tcp_socket.gets until builder.finished_headers?
   response = builder.message
   logger.debug do "Received response:\n\n#{response}" end
@@ -69,7 +69,7 @@ describe "Reading events" do
   logger.debug do "Reading stream:\n\n#{request}\r\n" end
   tcp_socket.write request
 
-  builder = HTTPProtocol::Response.builder
+  builder = HTTP::Protocol::Response.builder
   builder << tcp_socket.gets until builder.finished_headers?
   response = builder.message
   logger.debug do "Received response:\n\n#{response}" end

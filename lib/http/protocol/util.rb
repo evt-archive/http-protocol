@@ -1,4 +1,4 @@
-module HTTPProtocol
+module HTTP::Protocol
   module Util
     extend self
 

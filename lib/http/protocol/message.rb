@@ -1,4 +1,4 @@
-module HTTPProtocol
+module HTTP::Protocol
   class Message < Module
     require_relative "message/builder"
 
