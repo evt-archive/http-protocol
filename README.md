@@ -51,3 +51,34 @@ length = response["Content-Length"].to_i
 # Read the amount of data indicated by the server
 data = tcp_socket.read length
 ```
+
+## Advanced Techniques
+
+##### Setting headers
+
+`HTTP::Protocol` exposes a semantic API for setting headers. For instance, instead of setting `Accept` to `application/json; text/plain`, you can set them one at a time:
+
+```ruby
+# The handler for Accept manages a list of content types internally; you can
+# shovel them in one by one.
+request["Accept"] << "application/json"
+```
+
+See `tests/headers.rb` for usage examples of all of the headers that `HTTP::Protocol` knows about. The list is expected to grow over time. Any header that is not explicitly handled by `HTTP::Protocol` is treated as a custom header, which you can simply treat as a string:
+
+```ruby
+# Will write out Some-Header: foo
+request["Some-Header"] = "foo"
+```
+
+##### Merging headers
+
+Often, an HTTP client will have to use the same set of headers for every request. For example, if you are interacting with a JSON api, you will usually want to set `Accept: application/json`. To avoid needing to do this every single time, you can instantiate a set of common headers and merge them into your requests:
+
+```ruby
+common_headers = HTTP::Protocol::Request::Headers.new
+common_headers["Accept"] = "application/json"
+
+request = HTTP::Protocol::Request.new "GET", "/some_resource.json"
+request.merge_headers common_headers
+```
