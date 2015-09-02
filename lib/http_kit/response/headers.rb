@@ -1,6 +1,6 @@
 module HTTPKit
   class Response
-    class Headers < Headers::Common
+    class Headers < Headers
       define_header "Etag" do
         def validate etag
           unless etag.match %r{^(?:\W)?[-0-9a-f]{4,}$}
@@ -42,6 +42,10 @@ module HTTPKit
           Time.httpdate str
         rescue ArgumentError => error
           raise ProtocolError.new error.message
+        end
+
+        def value
+          @value.httpdate
         end
       end
     end

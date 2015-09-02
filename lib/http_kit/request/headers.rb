@@ -1,6 +1,6 @@
 module HTTPKit
   class Request
-    class Headers < Headers::Common
+    class Headers < Headers
       define_header "Accept" do
         def initialize
           @value = []

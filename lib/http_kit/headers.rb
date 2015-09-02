@@ -1,9 +1,13 @@
 require_relative "headers/common"
+require_relative "headers/define_header"
+require_relative "headers/handler"
 require_relative "headers/resolve"
 
 module HTTPKit
   class Headers
+    extend DefineHeader
     extend Resolve
+    include Common
 
     attr_accessor :custom_headers
 
