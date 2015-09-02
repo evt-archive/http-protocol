@@ -1,4 +1,4 @@
-module HTTPKit
+module HTTPProtocol
   class Message < Module
     require_relative "message/builder"
 

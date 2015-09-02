@@ -1,4 +1,4 @@
-module HTTPKit
+module HTTPProtocol
   class Headers
     class Handler
       def self.header_name

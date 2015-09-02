@@ -1,10 +1,10 @@
-module HTTPKit
+module HTTPProtocol
   class Response
     class Headers < Headers
       define_header "Etag" do
         def validate etag
           unless etag.match %r{^(?:\W)?[-0-9a-f]{4,}$}
-            raise ProtocolError.new "invalid etag #{etag.inspect}"
+            raise Error.new "invalid etag #{etag.inspect}"
           end
         end
       end
@@ -18,7 +18,7 @@ module HTTPKit
           vals = str.split ","
           vals.each_with_object Hash.new do |val, hsh|
             unless %r{^(?<property>timeout|max)=(?<number>\d+)$} =~ val
-              raise ProtocolError.new "invalid Keep-Alive #{str.inspect}"
+              raise Error.new "invalid Keep-Alive #{str.inspect}"
             end
             hsh[property.to_sym] = number.to_i
           end
@@ -41,7 +41,7 @@ module HTTPKit
         def coerce str
           Time.httpdate str
         rescue ArgumentError => error
-          raise ProtocolError.new error.message
+          raise Error.new error.message
         end
 
         def value

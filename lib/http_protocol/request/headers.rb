@@ -1,4 +1,4 @@
-module HTTPKit
+module HTTPProtocol
   class Request
     class Headers < Headers
       define_header "Accept" do
@@ -17,7 +17,7 @@ module HTTPKit
 
         def validate content_type
           unless content_type.match %r{\A.+/.+\Z}
-            raise ProtocolError.new "invalid content type #{content_type.inspect}"
+            raise Error.new "invalid content type #{content_type.inspect}"
           end
         end
 
@@ -43,7 +43,7 @@ module HTTPKit
         def validate charset
           Encoding.find charset
         rescue ArgumentError => error
-          raise ProtocolError.new error.message
+          raise Error.new error.message
         end
 
         def serialized_value

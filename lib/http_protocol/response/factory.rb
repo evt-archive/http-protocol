@@ -1,4 +1,4 @@
-module HTTPKit
+module HTTPProtocol
   class Response
     class Factory
       def self.call *args
@@ -22,7 +22,7 @@ module HTTPKit
       def match_line
         match = STATUS_LINE_REGEX.match status_line
         unless match
-          raise ProtocolError.new "Invalid status line #{status_line.inspect}"
+          raise Error.new "Invalid status line #{status_line.inspect}"
         end
         match.to_a.tap &:shift
       end

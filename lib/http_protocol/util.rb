@@ -1,4 +1,4 @@
-module HTTPKit
+module HTTPProtocol
   module Util
     extend self
 

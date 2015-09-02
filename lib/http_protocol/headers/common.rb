@@ -1,4 +1,4 @@
-module HTTPKit
+module HTTPProtocol
   class Headers
     module Common
       def self.included cls
@@ -10,7 +10,7 @@ module HTTPKit
 
             def validate value
               unless connections.include? value
-                raise ProtocolError.new "bad Connection value #{value.inspect}; valid values are #{connections.map(&:inspect) * ", "}"
+                raise Error.new "bad Connection value #{value.inspect}; valid values are #{connections.map(&:inspect) * ", "}"
               end
             end
           end
@@ -18,7 +18,7 @@ module HTTPKit
           define_header "Content-Length" do
             def validate value
               if value < 0
-                raise ProtocolError.new "content length must not be negative"
+                raise Error.new "content length must not be negative"
               end
             end
 
@@ -35,7 +35,7 @@ module HTTPKit
             def coerce str
               Time.httpdate str
             rescue ArgumentError => error
-              raise ProtocolError.new error.message
+              raise Error.new error.message
             end
 
             def value

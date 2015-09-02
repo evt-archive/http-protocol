@@ -1,4 +1,4 @@
-module HTTPKit
+module HTTPProtocol
   Message.class_eval do
     class Builder
       HEADER_REGEX = %r{^(?<header>[-\w]+): (?<value>.*?)\s*\r$}
@@ -24,14 +24,14 @@ module HTTPKit
       def handle_header line
         match = HEADER_REGEX.match line
         unless match
-          raise ProtocolError.new "not a header #{line.inspect}"
+          raise Error.new "not a header #{line.inspect}"
         end
         header, value = match.to_a.tap &:shift
         message[header].assign value
       end
 
       def handle_line_in_body line
-        raise ProtocolError.new "tried to read the body"
+        raise Error.new "tried to read the body"
       end
 
       def handle_line_initial line

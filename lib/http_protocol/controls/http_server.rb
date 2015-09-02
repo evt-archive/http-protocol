@@ -1,6 +1,6 @@
 require "webrick"
 
-module HTTPKit
+module HTTPProtocol
   module Controls
     module HTTPServer
       extend self

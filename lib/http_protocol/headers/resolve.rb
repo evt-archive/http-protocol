@@ -1,4 +1,4 @@
-module HTTPKit
+module HTTPProtocol
   class Headers
     module Resolve
       def resolve header_name

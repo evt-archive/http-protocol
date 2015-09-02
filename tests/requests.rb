@@ -1,20 +1,20 @@
 require "ftest/script"
-require "http_kit"
+require "http_protocol"
 
 def build_request action = "GET", path = "/"
-  HTTPKit::Request.new action, path
+  HTTPProtocol::Request.new action, path
 end
 
 describe "Parsing the request line" do
-  request = HTTPKit::Request.make "GET /foo HTTP/1.1\r"
+  request = HTTPProtocol::Request.make "GET /foo HTTP/1.1\r"
   assert request.action, :equals => "GET"
   assert request.path, :equals => "/foo"
 
-  assert :raises => HTTPKit::ProtocolError do
-    HTTPKit::Request.make "get /foo HTTP/1.1\r"
+  assert :raises => HTTPProtocol::Error do
+    HTTPProtocol::Request.make "get /foo HTTP/1.1\r"
   end
-  assert :raises => HTTPKit::ProtocolError do
-    HTTPKit::Request.make "NOTACTION /foo HTTP/1.1\r"
+  assert :raises => HTTPProtocol::Error do
+    HTTPProtocol::Request.make "NOTACTION /foo HTTP/1.1\r"
   end
 end
 

@@ -1,7 +1,7 @@
 require_relative "request/factory"
 require_relative "request/headers"
 
-module HTTPKit
+module HTTPProtocol
   class Request
     include Message.new Factory
 

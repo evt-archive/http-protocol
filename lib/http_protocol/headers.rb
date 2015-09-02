@@ -3,7 +3,7 @@ require_relative "headers/define_header"
 require_relative "headers/handler"
 require_relative "headers/resolve"
 
-module HTTPKit
+module HTTPProtocol
   class Headers
     extend DefineHeader
     extend Resolve

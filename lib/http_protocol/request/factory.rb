@@ -1,4 +1,4 @@
-module HTTPKit
+module HTTPProtocol
   class Request
     class Factory
       def self.call *args
@@ -23,7 +23,7 @@ module HTTPKit
       def match_line
         match = REQUEST_LINE_REGEX.match request_line
         unless match
-          raise ProtocolError.new "Invalid request line #{request_line.inspect}"
+          raise Error.new "Invalid request line #{request_line.inspect}"
         end
         match.to_a.tap &:shift
       end
