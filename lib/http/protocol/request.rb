@@ -19,7 +19,7 @@ module HTTP
       end
 
       def headers
-        @headers ||= Headers.new
+        @headers ||= Headers.build
       end
 
       def request_line

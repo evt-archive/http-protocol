@@ -19,10 +19,20 @@ module HTTP
 
         attr_reader :value
 
+        dependency :logger, Telemetry::Logger
+
+        def self.build(*arguments)
+          instance = new *arguments
+          Telemetry::Logger.configure instance
+          instance
+        end
+
         def assign(value)
+          logger.trace "Assigned value (Input Value: #{value.inspect}, Header Name: #{header_name.inspect})"
           value = coerce value if value.is_a? String
           Array(value).each &method(:validate)
           @value = value
+          logger.debug "Value assigned (Coerced Value: #{value.inspect}, Header Name: #{header_name.inspect})"
         end
 
         def coerce(str)

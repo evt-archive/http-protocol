@@ -12,7 +12,7 @@ module HTTP
       end
 
       def headers
-        @headers ||= Headers.new
+        @headers ||= Headers.build
       end
 
       def status_line

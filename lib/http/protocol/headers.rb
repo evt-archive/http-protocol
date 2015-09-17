@@ -7,6 +7,14 @@ module HTTP
 
       attr_accessor :custom_headers
 
+      dependency :logger, Telemetry::Logger
+
+      def self.build
+        instance = new
+        Telemetry::Logger.configure instance
+        instance
+      end
+
       def initialize
         @custom_headers = {}
       end
@@ -44,17 +52,21 @@ module HTTP
         end
       end
 
-      def merge other_headers
-        instance = self.class.new
+      def merge(other_headers)
+        instance = self.class.build
         instance.merge! self
         instance.merge! other_headers
         instance
       end
 
       def merge!(other_headers)
+        logger.trace "Merging headers"
+        logger.data other_headers
         other_headers.handlers.each do |header_name, handler|
           handlers[header_name] = handler.copy
         end
+        logger.debug "Headers merged"
+        logger.data self
       end
 
       def remove_custom_header(name)

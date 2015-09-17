@@ -8,7 +8,7 @@ require "securerandom"
 def common_headers
   @common_headers ||=
     begin
-      headers = HTTP::Protocol::Request::Headers.new
+      headers = HTTP::Protocol::Request::Headers.build
       headers["Host"] = "localhost"
       headers
     end

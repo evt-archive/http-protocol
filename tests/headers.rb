@@ -4,7 +4,7 @@ require "http/protocol"
 require "time"
 
 def build_headers
-  HTTP::Protocol::Headers.new
+  HTTP::Protocol::Headers.build
 end
 
 def fixed_time
@@ -95,7 +95,7 @@ end
 
 describe "Request headers" do
   def build_request_headers
-    HTTP::Protocol::Request::Headers.new
+    HTTP::Protocol::Request::Headers.build
   end
 
   describe "Accept" do
@@ -126,7 +126,7 @@ end
 
 describe "Response headers" do
   def build_response_headers
-    HTTP::Protocol::Response::Headers.new
+    HTTP::Protocol::Response::Headers.build
   end
 
   describe "Etag" do
