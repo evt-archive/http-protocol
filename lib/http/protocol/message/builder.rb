@@ -1,6 +1,6 @@
-module HTTP::Protocol
-  Message.class_eval do
-    class Builder
+module HTTP
+  module Protocol
+    class Message::Builder
       HEADER_REGEX = %r{^(?<header>[-\w]+): (?<value>.*?)\s*\r$}
 
       attr_reader :factory

@@ -1,57 +1,59 @@
-module HTTP::Protocol
-  class Message < Module
-    require_relative "message/builder"
+module HTTP
+  module Protocol
+    class Message < Module
+      require_relative "message/builder"
 
-    attr_reader :factory
+      attr_reader :factory
 
-    def initialize factory
-      @factory = factory
-    end
+      def initialize factory
+        @factory = factory
+      end
 
-    def included cls
-      cls.class_exec factory do |factory|
-        include InstanceMethods
+      def included cls
+        cls.class_exec factory do |factory|
+          include InstanceMethods
 
-        define_singleton_method :make do |first_line|
-          factory.(first_line)
+          define_singleton_method :make do |first_line|
+            factory.(first_line)
+          end
+
+          define_singleton_method :builder do
+            factory_method = method :make
+            Builder.new factory_method
+          end
+        end
+      end
+
+      module InstanceMethods
+        attr_writer :headers
+
+        def [] name
+          headers[name]
         end
 
-        define_singleton_method :builder do
-          factory_method = method :make
-          Builder.new factory_method
+        def []= name, value
+          headers[name] = value
         end
-      end
-    end
 
-    module InstanceMethods
-      attr_writer :headers
+        def first_line
+          fail "must be implemented"
+        end
 
-      def [] name
-        headers[name]
-      end
+        def headers
+          fail "must be implemented"
+        end
 
-      def []= name, value
-        headers[name] = value
-      end
+        def merge_headers new_headers
+          headers.merge! new_headers
+        end
 
-      def first_line
-        fail "must be implemented"
-      end
+        def newline
+          "\r\n"
+        end
 
-      def headers
-        fail "must be implemented"
-      end
-
-      def merge_headers new_headers
-        headers.merge! new_headers
-      end
-
-      def newline
-        "\r\n"
-      end
-
-      def to_s
-        [first_line, newline, headers, newline].join
+        def to_s
+          [first_line, newline, headers, newline].join
+        end
       end
     end
   end

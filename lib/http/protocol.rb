@@ -1,14 +1,20 @@
 require "forwardable"
 require "time"
 
-module HTTP
-  module Protocol
-    autoload :Headers, "http/protocol/headers"
-    autoload :Message, "http/protocol/message"
-    autoload :Request, "http/protocol/request"
-    autoload :Response, "http/protocol/response"
-    autoload :Util, "http/protocol/util"
+require "telemetry/logger"
 
-    Error = Class.new StandardError
-  end
-end
+require "http/protocol/util"
+
+require "http/protocol/error"
+require "http/protocol/headers/common"
+require "http/protocol/headers/define_header"
+require "http/protocol/headers/handler"
+require "http/protocol/headers/resolve"
+require "http/protocol/headers"
+require "http/protocol/message"
+require "http/protocol/request/factory"
+require "http/protocol/request/headers"
+require "http/protocol/request"
+require "http/protocol/response/factory"
+require "http/protocol/response/headers"
+require "http/protocol/response"
