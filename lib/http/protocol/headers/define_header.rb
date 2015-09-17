@@ -2,7 +2,7 @@ module HTTP
   module Protocol
     class Headers
       module DefineHeader
-        def define_header header_name, &blk
+        def define_header(header_name, &blk)
           handler_cls_name = Util.to_camel_case header_name
 
           handler_cls = Class.new Handler

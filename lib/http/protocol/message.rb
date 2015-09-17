@@ -5,11 +5,11 @@ module HTTP
 
       attr_reader :factory
 
-      def initialize factory
+      def initialize(factory)
         @factory = factory
       end
 
-      def included cls
+      def included(cls)
         cls.class_exec factory do |factory|
           include InstanceMethods
 
@@ -27,11 +27,11 @@ module HTTP
       module InstanceMethods
         attr_writer :headers
 
-        def [] name
+        def [](name)
           headers[name]
         end
 
-        def []= name, value
+        def []=(name, value)
           headers[name] = value
         end
 
@@ -43,7 +43,7 @@ module HTTP
           fail "must be implemented"
         end
 
-        def merge_headers new_headers
+        def merge_headers(new_headers)
           headers.merge! new_headers
         end
 

@@ -2,7 +2,7 @@ module HTTP
   module Protocol
     class Request
       class Factory
-        def self.call *args
+        def self.call(*args)
           instance = new *args
           instance.call
         end
@@ -12,7 +12,7 @@ module HTTP
 
         attr_reader :request_line
 
-        def initialize request_line
+        def initialize(request_line)
           @request_line = request_line
         end
 

@@ -19,13 +19,13 @@ module HTTP
 
         attr_reader :value
 
-        def assign value
+        def assign(value)
           value = coerce value if value.is_a? String
           Array(value).each &method(:validate)
           @value = value
         end
 
-        def coerce str
+        def coerce(str)
           str
         end
 
@@ -43,7 +43,7 @@ module HTTP
           self.class.header_name
         end
 
-        def validate *;
+        def validate(*)
         end
 
         def serialized_value
@@ -57,7 +57,7 @@ module HTTP
         class CustomHeader < Handler
           attr_reader :header_name
 
-          def initialize header_name
+          def initialize(header_name)
             @header_name = header_name
           end
         end

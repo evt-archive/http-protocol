@@ -11,19 +11,19 @@ module HTTP
         @custom_headers = {}
       end
 
-      def accept! content_type
+      def accept!(content_type)
         handlers["Accept"].add_content_type content_type
       end
 
-      def accept_charset! charset
+      def accept_charset!(charset)
         handlers["Accept-Charset"].add_charset charset
       end
 
-      def [] name
+      def [](name)
         handlers[name].serialized_value
       end
 
-      def []= name, str
+      def []=(name, str)
         if str.nil?
           handlers.delete name
         else
@@ -51,13 +51,13 @@ module HTTP
         instance
       end
 
-      def merge! other_headers
+      def merge!(other_headers)
         other_headers.handlers.each do |header_name, handler|
           handlers[header_name] = handler.copy
         end
       end
 
-      def remove_custom_header name
+      def remove_custom_header(name)
         custom_headers.delete name
       end
 

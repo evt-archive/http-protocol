@@ -2,7 +2,7 @@ module HTTP
   module Protocol
     class Headers
       module Resolve
-        def resolve header_name
+        def resolve(header_name)
           handler_cls_name = Util.to_camel_case header_name
 
           cls = self

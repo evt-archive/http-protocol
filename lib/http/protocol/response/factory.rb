@@ -2,7 +2,7 @@ module HTTP
   module Protocol
     class Response
       class Factory
-        def self.call *args
+        def self.call(*args)
           instance = new *args
           instance.call
         end
@@ -11,7 +11,7 @@ module HTTP
 
         attr_reader :status_line
 
-        def initialize status_line
+        def initialize(status_line)
           @status_line = status_line
         end
 

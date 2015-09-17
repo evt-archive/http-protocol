@@ -3,7 +3,7 @@ module HTTP
     module Util
       extend self
 
-      def to_camel_case str
+      def to_camel_case(str)
         str = "_#{str}"
         str.gsub! %r{[-_][a-zA-Z\d]} do |snake|
           snake.slice(1).upcase
@@ -12,7 +12,7 @@ module HTTP
         str
       end
 
-      def to_snake_case str
+      def to_snake_case(str)
         str = str.gsub '::', '/'
         # Convert FOOBar => FooBar
         str.gsub! %r{[[:upper:]]{2,}} do |uppercase|

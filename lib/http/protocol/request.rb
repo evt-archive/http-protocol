@@ -4,7 +4,7 @@ module HTTP
       include Message.new Factory
       extend Forwardable
 
-      def self.build request_line
+      def self.build(request_line)
         Builder.(request_line)
       end
 
@@ -13,7 +13,7 @@ module HTTP
       attr_reader :action
       attr_reader :path
 
-      def initialize action, path
+      def initialize(action, path)
         @action = action
         @path = path
       end

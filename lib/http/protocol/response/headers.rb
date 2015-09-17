@@ -3,7 +3,7 @@ module HTTP
     class Response
       class Headers < Headers
         define_header "Etag" do
-          def validate etag
+          def validate(etag)
             unless etag.match %r{^(?:\W)?[-0-9a-f]{4,}$}
               raise Error.new "invalid etag #{etag.inspect}"
             end
@@ -15,7 +15,7 @@ module HTTP
             @value = {}
           end
 
-          def coerce str
+          def coerce(str)
             vals = str.split ","
             vals.each_with_object Hash.new do |val, hsh|
               unless %r{^(?<property>timeout|max)=(?<number>\d+)$} =~ val
@@ -25,11 +25,11 @@ module HTTP
             end
           end
 
-          def timeout= val
+          def timeout=(val)
             @value[:timeout] = val.to_i
           end
 
-          def max= val
+          def max=(val)
             @value[:max] = val.to_i
           end
 
@@ -39,7 +39,7 @@ module HTTP
         end
 
         define_header "Last-Modified" do
-          def coerce str
+          def coerce(str)
             Time.httpdate str
           rescue ArgumentError => error
             raise Error.new error.message

@@ -6,7 +6,7 @@ module HTTP
       attr_reader :status_code
       attr_reader :reason_phrase
 
-      def initialize status_code, reason_phrase
+      def initialize(status_code, reason_phrase)
         @status_code = status_code
         @reason_phrase = reason_phrase
       end

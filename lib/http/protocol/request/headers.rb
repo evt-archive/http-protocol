@@ -7,16 +7,16 @@ module HTTP
             @value = []
           end
 
-          def coerce str
+          def coerce(str)
             str.split %r{; ?}
           end
 
-          def << content_type
+          def <<(content_type)
             validate content_type
             value << content_type
           end
 
-          def validate content_type
+          def validate(content_type)
             unless content_type.match %r{\A.+/.+\Z}
               raise Error.new "invalid content type #{content_type.inspect}"
             end
@@ -27,7 +27,7 @@ module HTTP
           end
         end
 
-        def accept content_type
+        def accept(content_type)
           handlers["Accept"] << content_type
         end
 
@@ -36,16 +36,16 @@ module HTTP
             @value = []
           end
 
-          def coerce str
+          def coerce(str)
             str.split %r{; ?}
           end
 
-          def << charset
+          def <<(charset)
             validate charset
             value << charset
           end
 
-          def validate charset
+          def validate(charset)
             Encoding.find charset
           rescue ArgumentError => error
             raise Error.new error.message
@@ -56,7 +56,7 @@ module HTTP
           end
         end
 
-        def accept_charset charset
+        def accept_charset(charset)
           handlers["Accept-Charset"] << charset
         end
       end
