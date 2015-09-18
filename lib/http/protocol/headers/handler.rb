@@ -28,7 +28,7 @@ module HTTP
         end
 
         def assign(value)
-          logger.trace "Assigned value (Input Value: #{value.inspect}, Header Name: #{header_name.inspect})"
+          logger.trace "Assigning value (Input Value: #{value.inspect}, Header Name: #{header_name.inspect})"
           value = coerce value if value.is_a? String
           Array(value).each &method(:validate)
           @value = value

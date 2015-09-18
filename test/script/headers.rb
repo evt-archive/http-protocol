@@ -1,7 +1,4 @@
-require "ftest/script"
-require "http/protocol"
-
-require "time"
+require_relative "./test_script_init"
 
 def build_headers
   HTTP::Protocol::Headers.build
@@ -20,7 +17,7 @@ describe "Common headers" do
     end
     headers["Connection"] = "close"
 
-    assert headers.to_s, :matches => %r{^Connection: close\r$}
+    assert headers.to_s.match(%r{^Connection: close\r$})
   end
 
   describe "custom headers" do
@@ -28,7 +25,7 @@ describe "Common headers" do
 
     headers["MY-CUSTOM-HEADER"] = "foo"
 
-    assert headers.to_s, :matches => %r{^MY-CUSTOM-HEADER: foo\r$}
+    assert headers.to_s.match(%r{^MY-CUSTOM-HEADER: foo\r$})
   end
 
   describe "Date" do
@@ -36,7 +33,7 @@ describe "Common headers" do
 
     headers["Date"] = fixed_time
 
-    assert headers.to_s, :matches => /^Date: Sat, 01 Jan 2000 00:00:00 GMT\r$/
+    assert headers.to_s.match(/^Date: Sat, 01 Jan 2000 00:00:00 GMT\r$/)
   end
 
   describe "Unsetting a header" do
@@ -45,7 +42,7 @@ describe "Common headers" do
     headers["Date"] = fixed_time
     headers["Date"] = nil
 
-    refute headers.to_s, :matches => /Date/
+    assert !headers.to_s.match(/Date/)
   end
 end
 
@@ -72,10 +69,10 @@ describe "Merging headers" do
 
     source.merge! target
 
-    assert source.to_s, :matches => /Content-Length: 88/
-    assert source.to_s, :matches => /CUSTOM-HEADER-1: baz/
-    assert source.to_s, :matches => /CUSTOM-HEADER-2: bar/
-    assert source.to_s, :matches => /Date: Sat, 01 Jan 2000 00:00:00 GMT/
+    assert source.to_s.match(/Content-Length: 88/)
+    assert source.to_s.match(/CUSTOM-HEADER-1: baz/)
+    assert source.to_s.match(/CUSTOM-HEADER-2: bar/)
+    assert source.to_s.match(/Date: Sat, 01 Jan 2000 00:00:00 GMT/)
   end
 
   describe "Non destructive" do
@@ -84,12 +81,12 @@ describe "Merging headers" do
 
     merged = source.merge target
 
-    assert merged.to_s, :matches => /Content-Length: 88/
-    assert merged.to_s, :matches => /CUSTOM-HEADER-1: baz/
-    assert merged.to_s, :matches => /CUSTOM-HEADER-2: bar/
-    assert merged.to_s, :matches => /Date: Sat, 01 Jan 2000 00:00:00 GMT/
-    assert source.to_s, :matches => /Content-Length: 55/
-    assert source.to_s, :matches => /CUSTOM-HEADER-1: foo/
+    assert merged.to_s.match(/Content-Length: 88/)
+    assert merged.to_s.match(/CUSTOM-HEADER-1: baz/)
+    assert merged.to_s.match(/CUSTOM-HEADER-2: bar/)
+    assert merged.to_s.match(/Date: Sat, 01 Jan 2000 00:00:00 GMT/)
+    assert source.to_s.match(/Content-Length: 55/)
+    assert source.to_s.match(/CUSTOM-HEADER-1: foo/)
   end
 end
 
@@ -108,7 +105,7 @@ describe "Request headers" do
     headers.accept "application/json"
     headers.accept "application/vnd+acme.v1+json"
 
-    assert headers.to_s, :matches => %r{^Accept: text/plain; application/json; application/vnd\+acme\.v1\+json\r$}
+    assert headers.to_s.match(%r{^Accept: text/plain; application/json; application/vnd\+acme\.v1\+json\r$})
   end
 
   describe "Accept-Charset" do
@@ -120,7 +117,7 @@ describe "Request headers" do
     headers.accept_charset "utf-8"
     headers.accept_charset "ascii"
 
-    assert headers.to_s, :matches => /^Accept-Charset: utf-8; ascii\r$/
+    assert headers.to_s.match(/^Accept-Charset: utf-8; ascii\r$/)
   end
 end
 
@@ -137,7 +134,7 @@ describe "Response headers" do
     end
     headers["Etag"] = "deadbeef"
 
-    assert headers.to_s, :matches => /^Etag: deadbeef\r$/
+    assert headers.to_s.match(/^Etag: deadbeef\r$/)
   end
 
   describe "Last-Modified" do
@@ -148,6 +145,6 @@ describe "Response headers" do
     end
     headers["Last-Modified"] = fixed_time
 
-    assert headers.to_s, :matches => /^Last-Modified: Sat, 01 Jan 2000 00:00:00 GMT\r$/
+    assert headers.to_s.match(/^Last-Modified: Sat, 01 Jan 2000 00:00:00 GMT\r$/)
   end
 end

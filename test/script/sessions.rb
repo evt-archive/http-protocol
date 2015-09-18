@@ -1,9 +1,4 @@
-require "ftest/script"
-require "http/protocol"
-
-require "json"
-require "socket"
-require "stringio"
+require_relative "./test_script_init"
 
 def establish_tcp_socket
   TCPSocket.new "127.0.0.1", 8888
@@ -26,7 +21,7 @@ describe "a simple client session" do
   data = tcp_socket.read
 
   resource = JSON.parse data, :symbolize_names => true
-  assert resource, :equals => { :id => 1234, :name => "A simple resource" }
+  assert resource == { :id => 1234, :name => "A simple resource" }
 end
 
 def simple_resource_post_message
@@ -58,5 +53,5 @@ describe "a simple server session" do
   body = io.read
 
   resource = JSON.parse body, :symbolize_names => true
-  assert resource, :equals => { :id => 2, :name => "Another simple resource" }
+  assert resource == { :id => 2, :name => "Another simple resource" }
 end
