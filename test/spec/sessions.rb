@@ -1,4 +1,4 @@
-require_relative "./test_script_init"
+require_relative "./spec_init"
 
 def establish_tcp_socket
   TCPSocket.new "127.0.0.1", 8888
@@ -11,7 +11,7 @@ def simple_resource_request
   request
 end
 
-describe "a simple client session" do
+describe "A simple client session" do
   tcp_socket = establish_tcp_socket
   tcp_socket.write simple_resource_request
 
@@ -21,7 +21,9 @@ describe "a simple client session" do
   data = tcp_socket.read
 
   resource = JSON.parse data, :symbolize_names => true
-  assert resource == { :id => 1234, :name => "A simple resource" }
+  specify "Output" do
+    assert resource == { :id => 1234, :name => "A simple resource" }
+  end
 end
 
 def simple_resource_post_message
@@ -43,7 +45,7 @@ Content-Length: #{data.size + 2}\r
   MESSAGE
 end
 
-describe "a simple server session" do
+describe "A simple server session" do
   data = simple_resource_post_message
   io = StringIO.new data
 
@@ -53,5 +55,7 @@ describe "a simple server session" do
   body = io.read
 
   resource = JSON.parse body, :symbolize_names => true
-  assert resource == { :id => 2, :name => "Another simple resource" }
+  specify "Output" do
+    assert resource == { :id => 2, :name => "Another simple resource" }
+  end
 end

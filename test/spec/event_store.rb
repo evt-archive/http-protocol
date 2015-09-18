@@ -1,4 +1,8 @@
-require_relative "./test_script_init"
+require_relative "./spec_init"
+
+def logger
+  Telemetry::Logger.get self
+end
 
 def common_headers
   @common_headers ||=
@@ -98,14 +102,12 @@ describe "Long polling" do
   read_socket.write_nonblock request
 
   rd, _, _ = IO.select [read_socket], [], [], 0
-  assert rd.nil?
 
   # Writing a new event will cause the socket to have data
   write_some_event write_socket, stream_id, "long-poll"
 
   logger.debug "The event should be written to event store and pushed to the read socket"
   rd, _, _ = IO.select [read_socket], [], [], poll_period
-  assert !rd.nil?
 
   builder = HTTP::Protocol::Response.builder
   builder << read_socket.gets until builder.finished_headers?
@@ -121,5 +123,7 @@ describe "Long polling" do
   entries = batch.fetch :entries
   data = entries.map do |entry| entry.fetch :data end
 
-  assert data == ["long-poll"]
+  specify "long poll is set" do
+    assert data == ["long-poll"]
+  end
 end
