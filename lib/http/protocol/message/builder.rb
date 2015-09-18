@@ -6,12 +6,12 @@ module HTTP
       attr_reader :factory
       attr_reader :message
 
-      def initialize factory
+      def initialize(factory)
         @factory = factory
         @in_body = false
       end
 
-      def << data
+      def <<(data)
         data.each_line do |line|
           public_send "handle_line_#{state}", line
         end
@@ -21,7 +21,7 @@ module HTTP
         @in_body
       end
 
-      def handle_header line
+      def handle_header(line)
         match = HEADER_REGEX.match line
         unless match
           raise Error.new "not a header #{line.inspect}"
@@ -30,15 +30,15 @@ module HTTP
         message[header] = value
       end
 
-      def handle_line_in_body line
+      def handle_line_in_body(line)
         raise Error.new "tried to read the body"
       end
 
-      def handle_line_initial line
+      def handle_line_initial(line)
         @message = factory[line]
       end
 
-      def handle_line_headers line
+      def handle_line_headers(line)
         if line == message.newline
           @in_body = true
           return
