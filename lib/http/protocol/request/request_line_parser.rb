@@ -1,7 +1,7 @@
 module HTTP
   module Protocol
     class Request
-      class Factory
+      class RequestLineParser
         def self.call(*args)
           instance = new *args
           instance.call

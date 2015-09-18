@@ -1,7 +1,7 @@
 module HTTP
   module Protocol
     class Response
-      class Factory
+      class StatusLineParser
         def self.call(*args)
           instance = new *args
           instance.call

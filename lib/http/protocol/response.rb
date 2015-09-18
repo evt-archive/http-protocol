@@ -1,7 +1,7 @@
 module HTTP
   module Protocol
     class Response
-      include Message.new Factory
+      include Message
 
       attr_reader :status_code
       attr_reader :reason_phrase

@@ -2,7 +2,7 @@ require_relative "./spec_init"
 
 describe "Parsing" do
   specify "Valid request line" do
-    request = HTTP::Protocol::Request.make "GET /foo HTTP/1.1\r"
+    request = HTTP::Protocol::Request::RequestLineParser.call "GET /foo HTTP/1.1\r"
     assert request.action == "GET"
     assert request.path == "/foo"
   end
@@ -11,14 +11,14 @@ describe "Parsing" do
     errors = 0
 
     begin
-      HTTP::Protocol::Request.make "get /foo HTTP/1.1\r"
+      HTTP::Protocol::Request::RequestLineParser.call "get /foo HTTP/1.1\r"
     rescue HTTP::Protocol::Error
       errors += 1
     end
     assert errors == 1
 
     begin
-      HTTP::Protocol::Request.make "NOTACTION /foo HTTP/1.1\r"
+      HTTP::Protocol::Request::RequestLineParser.call "NOTACTION /foo HTTP/1.1\r"
     rescue HTTP::Protocol::Error
       errors += 1
     end

@@ -15,7 +15,7 @@ describe "A simple client session" do
   tcp_socket = establish_tcp_socket
   tcp_socket.write simple_resource_request
 
-  builder = HTTP::Protocol::Response.builder
+  builder = HTTP::Protocol::Response::Builder.build
   builder << tcp_socket.gets until builder.finished_headers?
 
   data = tcp_socket.read
@@ -49,7 +49,7 @@ describe "A simple server session" do
   data = simple_resource_post_message
   io = StringIO.new data
 
-  builder = HTTP::Protocol::Request.builder
+  builder = HTTP::Protocol::Request::Builder.build
   builder << io.gets until builder.finished_headers?
 
   body = io.read

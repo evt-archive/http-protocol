@@ -36,7 +36,7 @@ def write_some_event(tcp_socket, stream_id, event)
   tcp_socket.write request
   tcp_socket.write event
 
-  builder = HTTP::Protocol::Response.builder
+  builder = HTTP::Protocol::Response::Builder.build
   builder << tcp_socket.gets until builder.finished_headers?
 
   response = builder.message
@@ -76,7 +76,7 @@ describe "Reading events" do
   logger.debug "Reading stream:\n\n#{request}\r\n"
   tcp_socket.write request
 
-  builder = HTTP::Protocol::Response.builder
+  builder = HTTP::Protocol::Response::Builder.build
   builder << tcp_socket.gets until builder.finished_headers?
   response = builder.message
   logger.debug "Received response:\n\n#{response}"
@@ -109,7 +109,7 @@ describe "Long polling" do
   logger.debug "The event should be written to event store and pushed to the read socket"
   rd, _, _ = IO.select [read_socket], [], [], poll_period
 
-  builder = HTTP::Protocol::Response.builder
+  builder = HTTP::Protocol::Response::Builder.build
   builder << read_socket.gets until builder.finished_headers?
   response = builder.message
   logger.debug "Received response headers"

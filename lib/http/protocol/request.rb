@@ -1,7 +1,7 @@
 module HTTP
   module Protocol
     class Request
-      include Message.new Factory
+      include Message
       extend Forwardable
 
       def self.build(request_line)
