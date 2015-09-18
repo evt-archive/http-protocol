@@ -10,9 +10,9 @@ end
 
 describe "Common headers" do
   describe "Connection" do
-    headers = build_headers
-
     specify "Validation" do
+      headers = build_headers
+
       errors = 0
       begin
         headers["Connection"] = "not-valid"
@@ -20,10 +20,11 @@ describe "Common headers" do
         errors += 1
       end
       assert errors == 1
-      headers["Connection"] = "close"
     end
 
     specify "Set on output" do
+      headers = build_headers
+      headers["Connection"] = "close"
       assert headers.to_s.match(%r{^Connection: close\r$})
     end
   end
