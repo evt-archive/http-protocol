@@ -1,12 +1,10 @@
 Gem::Specification.new do |s|
-  s.name        = "http-protocol"
-  s.version     = "0.1.0"
-  s.licenses    = ["MIT"]
-  s.summary     = "HTTP protocol library designed to facilitate custom HTTP clients"
-  s.description = "HTTP protocol library designed to facilitate custom HTTP clients. Does not handle connections, sessions; it's just the protocol"
-  s.authors     = ["Nathan Ladd"]
-  s.email       = "nathanladd+github@gmail.com"
-  s.files       = Dir["lib/**/*.rb"]
-  s.homepage    = "https://github.com/obsidian-btc/http-protocol"
-  s.executables = []
+  s.name = "http_protocol"
+  s.version = '0.0.0'
+  s.summary = "HTTP protocol library designed to facilitate custom HTTP clients"
+  s.authors = ['']
+  s.require_paths = ['lib']
+  s.files = Dir.glob('{lib}/**/*')
+  s.platform = Gem::Platform::RUBY
+  s.required_ruby_version = '>= 2.2.3'
 end
