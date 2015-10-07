@@ -4,7 +4,7 @@ module HTTP
       class StatusLineParser
         def self.call(*args)
           instance = new *args
-          instance.call
+          instance.()
         end
 
         STATUS_LINE_REGEX = %r{^HTTP\/1\.1 (?<status_code>\d+) (?<reason_phrase>.+?)\s*\r$}
