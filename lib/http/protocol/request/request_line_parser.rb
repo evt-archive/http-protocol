@@ -4,7 +4,7 @@ module HTTP
       class RequestLineParser
         def self.call(*args)
           instance = new *args
-          instance.call
+          instance.()
         end
 
         ACTIONS = %w(OPTIONS GET HEAD POST PUT DELETE TRACE CONNECT PATCH)
