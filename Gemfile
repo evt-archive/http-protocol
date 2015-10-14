@@ -1,13 +1,9 @@
-source "https://rubygems.org"
+source 'https://gem.fury.io/obsidian/' do
+  gem 'telemetry-logger'
+  gem 'runner'
+end
 
-require "./prox_gem"
-
-prox_gem "attribute"
-prox_gem "clock"
-prox_gem "dependency"
-prox_gem "runner"
-prox_gem "subst_attr"
-prox_gem "telemetry_logger"
+source 'https://rubygems.org'
 
 gem 'minitest', '~> 5.5.0'
 gem 'minitest-spec-context', '0.0.3'

@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name = "http_protocol"
+  s.name = "http-protocol"
   s.version = '0.0.0'
   s.summary = "HTTP protocol library designed to facilitate custom HTTP clients"
   s.authors = ['']
@@ -7,4 +7,6 @@ Gem::Specification.new do |s|
   s.files = Dir.glob('{lib}/**/*')
   s.platform = Gem::Platform::RUBY
   s.required_ruby_version = '>= 2.2.3'
+
+  s.add_runtime_dependency 'telemetry-logger'
 end
