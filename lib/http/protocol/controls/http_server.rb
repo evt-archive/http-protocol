@@ -1,4 +1,5 @@
 require "webrick"
+require "webrick/https"
 
 module HTTP
   module Protocol
@@ -6,16 +7,31 @@ module HTTP
       module HTTPServer
         extend self
 
-        def start
-          @server = WEBrick::HTTPServer.new(
+        attr_reader :server
+
+        def start(ssl=nil)
+          ssl ||= ENV["TEST_SERVER_HTTPS"] == "on"
+
+          params = {
             :Port => port.to_i,
             :DocumentRoot => root,
-          )
-          @server.start
+          }
+
+          if ssl
+            cert_name = %w[CN localhost]
+            params.update(
+              :SSLEnable => true,
+              :SSLCertName => [%W[CN localhost]]
+            )
+          end
+
+          @server = WEBrick::HTTPServer.new params
+
+          server.start
         end
 
         def stop
-          @server.shutdown
+          server.shutdown
         end
 
         def root
