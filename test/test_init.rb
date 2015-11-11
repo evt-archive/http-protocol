@@ -4,6 +4,8 @@ ENV['LOG_LEVEL'] ||= 'trace'
 
 puts RUBY_DESCRIPTION
 
-require_relative "../init"
+require_relative '../init.rb'
 
-require "runner"
+require 'runner'
+
+Telemetry::Logger::AdHoc.activate
