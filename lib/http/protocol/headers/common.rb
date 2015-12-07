@@ -14,6 +14,10 @@ module HTTP
                   raise Error.new "bad Connection value #{value.inspect}; valid values are #{connections.map(&:inspect) * ", "}"
                 end
               end
+
+              def coerce(value)
+                value.downcase
+              end
             end
 
             define_header "Content-Length" do

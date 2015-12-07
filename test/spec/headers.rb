@@ -22,6 +22,14 @@ describe "Common headers" do
       assert errors == 1
     end
 
+    specify 'Case Insensitivity' do
+      headers = build_headers
+
+      headers['Connection'] = 'KEEP-ALIVE'
+
+      assert headers['Connection'].to_s == 'keep-alive'
+    end
+
     specify "Set on output" do
       headers = build_headers
       headers["Connection"] = "close"
