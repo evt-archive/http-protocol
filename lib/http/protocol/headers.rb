@@ -60,13 +60,13 @@ module HTTP
       end
 
       def merge!(other_headers)
-        logger.trace "Merging headers"
-        logger.data other_headers
+        logger.opt_trace "Merging headers"
+        logger.opt_data other_headers
         other_headers.handlers.each do |header_name, handler|
           handlers[header_name] = handler.copy
         end
-        logger.debug "Headers merged"
-        logger.data self
+        logger.opt_debug "Headers merged"
+        logger.opt_data self
       end
 
       def remove_custom_header(name)
