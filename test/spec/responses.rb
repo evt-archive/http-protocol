@@ -1,13 +1,13 @@
 require_relative "./spec_init"
 
-describe "Parsing" do
-  specify "Valid status line" do
+context "Parsing" do
+  test "Valid status line" do
     response = HTTP::Protocol::Response::StatusLineParser.("HTTP/1.1 200 OK\r\n")
     assert response.status_code == 200
     assert response.reason_phrase == "OK"
   end
 
-  specify "Invalid status line" do
+  test "Invalid status line" do
     errors = 0
     begin
       HTTP::Protocol::Response::StatusLineParser.("200 OK\r")

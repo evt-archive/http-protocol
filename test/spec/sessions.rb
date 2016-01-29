@@ -11,7 +11,7 @@ def simple_resource_request
   request
 end
 
-describe "A simple client session" do
+context "A simple client session" do
   tcp_socket = establish_tcp_socket
   tcp_socket.write simple_resource_request
 
@@ -45,7 +45,7 @@ Content-Length: #{data.size + 2}\r
   MESSAGE
 end
 
-describe "A simple server session" do
+context "A simple server session" do
   data = simple_resource_post_message
   io = StringIO.new data
 
@@ -55,7 +55,7 @@ describe "A simple server session" do
   body = io.read
 
   resource = JSON.parse body, :symbolize_names => true
-  specify "Output" do
+  test "Output" do
     assert resource == { :id => 2, :name => "Another simple resource" }
   end
 end

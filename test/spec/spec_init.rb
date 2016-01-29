@@ -6,5 +6,3 @@ require "socket"
 require "stringio"
 require "time"
 
-require "minitest"
-require "minitest-spec-context"

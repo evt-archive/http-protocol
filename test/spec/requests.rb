@@ -1,13 +1,13 @@
 require_relative "./spec_init"
 
-describe "Parsing" do
-  specify "Valid request line" do
+context "Parsing" do
+  test "Valid request line" do
     request = HTTP::Protocol::Request::RequestLineParser.("GET /foo HTTP/1.1\r")
     assert request.action == "GET"
     assert request.path == "/foo"
   end
 
-  specify "Invalid actions" do
+  test "Invalid actions" do
     errors = 0
 
     begin
@@ -26,8 +26,8 @@ describe "Parsing" do
   end
 end
 
-describe "Setting headers" do
-  specify "Content-Length" do
+context "Setting headers" do
+  test "Content-Length" do
     request = HTTP::Protocol::Request.new "GET", "/"
     request["Content-Length"] = "55"
     assert request.to_s.match(%r{^Content-Length: 55\r$})

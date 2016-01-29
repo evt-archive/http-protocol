@@ -63,13 +63,13 @@ def establish_connection
   TCPSocket.new "127.0.0.1", "2113"
 end
 
-describe "Writing events" do
+context "Writing events" do
   tcp_socket = establish_connection
   request = write_event_request
   write_some_event tcp_socket, "deadbeef", "an-event"
 end
 
-describe "Reading events" do
+context "Reading events" do
   tcp_socket = establish_connection
   request = read_events_request
 
@@ -87,7 +87,7 @@ describe "Reading events" do
   logger.debug "Stream data:\n\n#{data}"
 end
 
-describe "Long polling" do
+context "Long polling" do
   stream_id = uuid
   poll_period = 3
   write_socket = establish_connection
@@ -123,7 +123,7 @@ describe "Long polling" do
   entries = batch.fetch :entries
   data = entries.map do |entry| entry.fetch :data end
 
-  specify "long poll is set" do
+  test "long poll is set" do
     assert data == ["long-poll"]
   end
 end

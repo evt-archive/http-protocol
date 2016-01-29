@@ -8,9 +8,9 @@ def fixed_time
   Time.new 2000, 1, 1, 0, 0, 0, 0
 end
 
-describe "Common headers" do
-  describe "Connection" do
-    specify "Validation" do
+context "Common headers" do
+  context "Connection" do
+    test "Validation" do
       headers = build_headers
 
       errors = 0
@@ -22,7 +22,7 @@ describe "Common headers" do
       assert errors == 1
     end
 
-    specify 'Case Insensitivity' do
+    test 'Case Insensitivity' do
       headers = build_headers
 
       headers['Connection'] = 'KEEP-ALIVE'
@@ -30,46 +30,46 @@ describe "Common headers" do
       assert headers['Connection'].to_s == 'keep-alive'
     end
 
-    specify "Set on output" do
+    test "Set on output" do
       headers = build_headers
       headers["Connection"] = "close"
       assert headers.to_s.match(%r{^Connection: close\r$})
     end
   end
 
-  describe "custom headers" do
+  context "custom headers" do
     headers = build_headers
 
     headers["MY-CUSTOM-HEADER"] = "foo"
 
-    specify "Set on output" do
+    test "Set on output" do
       assert headers.to_s.match(%r{^MY-CUSTOM-HEADER: foo\r$})
     end
   end
 
-  describe "Date" do
+  context "Date" do
     headers = build_headers
 
     headers["Date"] = fixed_time
 
-    specify "Set on output" do
+    test "Set on output" do
       assert headers.to_s.match(/^Date: Sat, 01 Jan 2000 00:00:00 GMT\r$/)
     end
   end
 
-  describe "Unsetting a header" do
+  context "Unsetting a header" do
     headers = build_headers
 
     headers["Date"] = fixed_time
     headers["Date"] = nil
 
-    specify "Set on output" do
+    test "Set on output" do
       assert !headers.to_s.match(/Date/)
     end
   end
 end
 
-describe "Merging headers" do
+context "Merging headers" do
   def build_source_headers
     source = build_headers
     source["Content-Length"] = 55
@@ -86,8 +86,8 @@ describe "Merging headers" do
     target
   end
 
-  describe "Destructive" do
-    specify "Set on output" do
+  context "Destructive" do
+    test "Set on output" do
       source = build_source_headers
       target = build_target_headers
 
@@ -100,8 +100,8 @@ describe "Merging headers" do
     end
   end
 
-  describe "Non destructive" do
-    specify "Set on output" do
+  context "Non destructive" do
+    test "Set on output" do
       source = build_source_headers
       target = build_target_headers
 
@@ -117,13 +117,13 @@ describe "Merging headers" do
   end
 end
 
-describe "Request headers" do
+context "Request headers" do
   def build_request_headers
     HTTP::Protocol::Request::Headers.build
   end
 
-  describe "Accept" do
-    specify "Validation" do
+  context "Accept" do
+    test "Validation" do
       headers = build_request_headers
 
       errors = 0
@@ -135,7 +135,7 @@ describe "Request headers" do
       assert errors == 1
     end
 
-    specify "Set on output" do
+    test "Set on output" do
       headers = build_request_headers
       headers.accept "text/plain"
       headers.accept "application/json"
@@ -144,8 +144,8 @@ describe "Request headers" do
     end
   end
 
-  describe "Accept-Charset" do
-    specify "Validation" do
+  context "Accept-Charset" do
+    test "Validation" do
       headers = build_request_headers
 
       errors = 0
@@ -158,7 +158,7 @@ describe "Request headers" do
       assert errors == 1
     end
 
-    specify "Set on output" do
+    test "Set on output" do
       headers = build_request_headers
       headers.accept_charset "utf-8"
       headers.accept_charset "ascii"
@@ -167,13 +167,13 @@ describe "Request headers" do
   end
 end
 
-describe "Response headers" do
+context "Response headers" do
   def build_response_headers
     HTTP::Protocol::Response::Headers.build
   end
 
-  describe "Etag" do
-    specify "Validation" do
+  context "Etag" do
+    test "Validation" do
       headers = build_response_headers
 
       errors = 0
@@ -186,7 +186,7 @@ describe "Response headers" do
       assert errors == 1
     end
 
-    specify "Set on output" do
+    test "Set on output" do
       headers = build_response_headers
 
       headers["Etag"] = "deadbeef"
@@ -195,8 +195,8 @@ describe "Response headers" do
     end
   end
 
-  describe "Last-Modified" do
-    specify "Validation" do
+  context "Last-Modified" do
+    test "Validation" do
       headers = build_response_headers
       errors = 0
       begin
@@ -206,7 +206,7 @@ describe "Response headers" do
       end
     end
 
-    specify "Set on output" do
+    test "Set on output" do
       headers = build_response_headers
       headers["Last-Modified"] = fixed_time
       assert headers.to_s.match(/^Last-Modified: Sat, 01 Jan 2000 00:00:00 GMT\r$/)
