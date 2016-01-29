@@ -4,17 +4,6 @@ def establish_tcp_socket(port = 8888)
   TCPSocket.new "127.0.0.1", port
 end
 
-def establish_ssl_socket
-  tcp_socket = establish_tcp_socket 8889
-
-  ssl_context = OpenSSL::SSL::SSLContext.new
-  ssl_context.set_params verify_mode: OpenSSL::SSL::VERIFY_NONE
-  ssl_socket = OpenSSL::SSL::SSLSocket.new tcp_socket, ssl_context
-  ssl_socket.sync_close = true
-  ssl_socket.connect
-  ssl_socket
-end
-
 def simple_resource_request
   request = HTTP::Protocol::Request.new "GET", "/simple_resource.json"
   request["Host"] = "localhost"
@@ -32,23 +21,7 @@ describe "A simple client session" do
   data = tcp_socket.read
 
   resource = JSON.parse data, :symbolize_names => true
-  specify "Output" do
-    assert resource == { :id => 1234, :name => "A simple resource" }
-  end
-end
-
-describe "A simple client HTTPS session" do
-  tcp_socket = establish_ssl_socket
-
-  tcp_socket.write simple_resource_request.to_s
-
-  builder = HTTP::Protocol::Response::Builder.build
-  builder << tcp_socket.gets until builder.finished_headers?
-
-  data = tcp_socket.read
-
-  resource = JSON.parse data, :symbolize_names => true
-  specify "Output" do
+  test "Output" do
     assert resource == { :id => 1234, :name => "A simple resource" }
   end
 end
