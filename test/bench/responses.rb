@@ -1,4 +1,4 @@
-require_relative "./spec_init"
+require_relative "./bench_init"
 
 context "Parsing" do
   test "Valid status line" do

@@ -1,4 +1,4 @@
-require_relative "./spec_init"
+require_relative "./bench_init"
 
 def establish_tcp_socket(port = 8888)
   TCPSocket.new "127.0.0.1", port

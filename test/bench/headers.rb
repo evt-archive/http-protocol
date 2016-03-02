@@ -1,4 +1,4 @@
-require_relative "./spec_init"
+require_relative "./bench_init"
 
 def build_headers
   HTTP::Protocol::Headers.build
