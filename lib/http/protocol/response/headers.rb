@@ -4,9 +4,13 @@ module HTTP
       class Headers < Headers
         define_header "Etag" do
           def validate(etag)
-            unless etag.match %r{^(?:\W)?[-0-9a-f]{4,}$}
+            unless pattern.match etag
               raise Error.new "invalid etag #{etag.inspect}"
             end
+          end
+
+          def pattern
+            %r{^(?:W/)?"?[!#-~\x80-\xFF]*"?$}n
           end
         end
 

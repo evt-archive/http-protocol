@@ -173,25 +173,52 @@ context "Response headers" do
   end
 
   context "Etag" do
-    test "Validation" do
+    context "Validation" do
       headers = build_response_headers
 
-      errors = 0
-      begin
-        headers["Etag"] = "not_an_etag"
-      rescue HTTP::Protocol::Error
-        errors += 1
+      test "Correct etag" do
+        begin
+          headers["Etag"] = %{"some-etag"}
+        rescue HTTP::Protocol::Error => error
+        end
+
+        assert error.nil?
       end
 
-      assert errors == 1
+      test "Weak is included" do
+        begin
+          headers["Etag"] = %{W/"!"}
+        rescue HTTP::Protocol::Error => error
+        end
+
+        assert error.nil?
+      end
+
+      test "Quotes are not required" do
+        begin
+          headers["Etag"] = %{some-etag}
+        rescue HTTP::Protocol::Error => error
+        end
+
+        assert error.nil?
+      end
+
+      test "Spaces aren't allowed" do
+        begin
+          headers["Etag"] = %{"some etag"}
+        rescue HTTP::Protocol::Error => error
+        end
+
+        assert error
+      end
     end
 
     test "Set on output" do
       headers = build_response_headers
 
-      headers["Etag"] = "deadbeef"
+      headers["Etag"] = %{"some-etag"}
 
-      assert headers.to_s.match(/^Etag: deadbeef\r$/)
+      assert headers.to_s.match(/^Etag: "some-etag"\r$/)
     end
   end
 
