@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "http-protocol"
-  s.version = '0.0.1.5'
+  s.version = '0.1.0.0'
   s.summary = "HTTP protocol library designed to facilitate custom HTTP clients"
   s.description = ' '
 
