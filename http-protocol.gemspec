@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.summary = "HTTP protocol library designed to facilitate custom HTTP clients"
   s.description = ' '
 
-  s.authors = ['Obsidian Software, Inc']
-  s.email = 'opensource@obsidianexchange.com'
+  s.authors = ['The Eventide Project']
+  s.email = 'opensource@eventide-project.org'
   s.homepage = 'https://github.com/obsidian-btc/http-protocol'
   s.licenses = ['MIT']
 
