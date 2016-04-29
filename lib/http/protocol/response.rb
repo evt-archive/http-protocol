@@ -15,6 +15,10 @@ module HTTP
         @headers ||= Headers.build
       end
 
+      def parse_header(name)
+        headers.handlers[name].value
+      end
+
       def status_line
         "HTTP/1.1 #{status_code} #{reason_phrase}"
       end
