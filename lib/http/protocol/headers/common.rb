@@ -44,7 +44,7 @@ module HTTP
               end
 
               def value
-                @value.httpdate
+                @value && @value.httpdate
               end
             end
           end
